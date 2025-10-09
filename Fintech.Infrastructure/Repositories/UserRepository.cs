@@ -41,14 +41,18 @@ public class UserRepository : IUserRepository
         return _mapper.Map<User>(inserted.Models.First());
     }
 
-    public Task<User> UpdateAsync(User user)
+    public async Task<User> UpdateAsync(User user)
     {
-        throw new NotImplementedException();
+        var model = _mapper.Map<UserModel>(user);
+        var result = await _supabase.From<UserModel>().Update(model);
+        return _mapper.Map<User>(result.Models.First());
     }
 
-    public Task DeleteAsync(Guid id)
+    public async Task DeleteAsync(Guid id)
     {
-        throw new NotImplementedException();
+        await _supabase.From<UserModel>()
+            .Where(u => u.Id == id)
+            .Delete();
     }
 
 }

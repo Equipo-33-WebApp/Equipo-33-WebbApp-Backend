@@ -1,5 +1,5 @@
+using Fintech.Application.DTOs;
 using Fintech.Application.Interfaces;
-using Fintech.Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Fintech.WebAPI.Controllers;
@@ -16,37 +16,45 @@ public class UserController : ControllerBase
     }
 
     [HttpGet("{id}")]
-    public async Task<ActionResult<User?>> GetByIdAsync(Guid id)
+    public async Task<ActionResult<UserDto?>> GetByIdAsync(Guid id)
     {
         var response = await _userService.GetByIdAsync(id);
+        if (response == null)
+        {
+            return NotFound();
+        }
         return Ok(response);
     }
 
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<User>>> GetAllAsync()
+    public async Task<ActionResult<IEnumerable<UserDto>>> GetAllAsync()
     {
         var response = await _userService.GetAllAsync();
         return Ok(response);
     }
 
     [HttpPost]
-    public async Task<ActionResult<User>> CreateAsync(User user)
+    public async Task<IActionResult> CreateAsync(CreateUserDto user)
     {
         var response = await _userService.CreateAsync(user);
         return Ok(response);
     }
 
-    // TODO: Añadir lógica para actualizar un usuario
     [HttpPut("{id}")]
-    public Task<ActionResult<User>> UpdateAsync(Guid id, User user)
+    public async Task<ActionResult<UserDto>> UpdateAsync(Guid id, UpdateUserDto userDto)
     {
-        throw new NotImplementedException();
+        var updatedUser = await _userService.UpdateAsync(id, userDto);
+        if (updatedUser == null)
+        {
+            return NotFound();
+        }
+        return Ok(updatedUser);
     }
 
-    // TODO: Añadir lógica para eliminar un usuario
     [HttpDelete("{id}")]
-    public Task DeleteAsync(Guid id)
+    public async Task<IActionResult> DeleteAsync(Guid id)
     {
-        throw new NotImplementedException();
+        await _userService.DeleteAsync(id);
+        return NoContent();
     }
 }

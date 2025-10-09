@@ -12,6 +12,7 @@ public class UserProfile : Profile
         CreateMap<User, UserDto>();
         CreateMap<CreateUserDto, User>()
             .ForMember(dest => dest.Created_At, opt => opt.MapFrom(_ => DateTime.UtcNow));
+
         CreateMap<User, UserModel>().ReverseMap();
     }
 }

@@ -33,22 +33,31 @@ public class UserService : IUserService
         return _mapper.Map<IEnumerable<UserDto>>(users);
     }
 
-    public async Task<UserDto> CreateAsync(User user)
+    public async Task<UserDto> CreateAsync(CreateUserDto createUser)
     {
+        var user = _mapper.Map<User>(createUser);
         var createdUser = await _userRepository.CreateAsync(user);
         return _mapper.Map<UserDto>(createdUser);
     }
 
     // TODO: Añadir lógica para actualizar un usuario
-    public Task<UserDto> UpdateAsync(User user)
+    public async Task<UserDto?> UpdateAsync(Guid id, UpdateUserDto updateUserDto)
     {
-        throw new NotImplementedException();
+        var user = await _userRepository.GetByIdAsync(id);
+        if (user == null)
+        {
+            return null;
+        }
+
+        _mapper.Map(updateUserDto, user);
+        var updatedUser = await _userRepository.UpdateAsync(user);
+        return _mapper.Map<UserDto>(updatedUser);
     }
 
     // TODO: Añadir lógica para eliminar un usuario
-    public Task DeleteAsync(Guid id)
+    public async Task DeleteAsync(Guid id)
     {
-        throw new NotImplementedException();
+        await _userRepository.DeleteAsync(id);
     }
 
 }
