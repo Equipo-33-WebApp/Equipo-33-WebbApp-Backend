@@ -48,7 +48,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         var jwksUrl = $"{url}/auth/v1/.well-known/jwks.json";
 
         using var client = new HttpClient();
-        var json = client.GetStringAsync(jwksUrl).Result; // Realizar la llamada de forma síncrona
+        var json = client.GetStringAsync(jwksUrl).Result;
         var jwks = new JsonWebKeySet(json);
         options.TokenValidationParameters = new TokenValidationParameters
         {
