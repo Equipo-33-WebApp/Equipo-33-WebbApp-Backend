@@ -1,11 +1,12 @@
 using Fintech.Application.DTOs;
 using Fintech.Application.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Fintech.WebAPI.Controllers;
 
-[Route("api/users")]
 [ApiController]
+[Route("api/users")]
 public class UserController : ControllerBase
 {
     private readonly IUserService _userService;
@@ -27,6 +28,7 @@ public class UserController : ControllerBase
     }
 
     [HttpGet]
+    [Authorize]
     public async Task<ActionResult<IEnumerable<UserDto>>> GetAllAsync()
     {
         var response = await _userService.GetAllAsync();
