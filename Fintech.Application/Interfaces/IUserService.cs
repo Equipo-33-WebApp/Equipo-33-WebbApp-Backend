@@ -1,5 +1,4 @@
 using Fintech.Application.DTOs;
-using Fintech.Domain.Entities;
 
 namespace Fintech.Application.Interfaces;
 
