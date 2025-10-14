@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.OpenApi.Models;
 using DotNetEnv.Configuration;
 using Microsoft.IdentityModel.Tokens;
+using Fintech.WebAPI;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -30,6 +31,8 @@ var options = new SupabaseOptions
     AutoConnectRealtime = true,
 };
 builder.Services.AddSingleton(provider => new Client(url, key, options));
+
+builder.Services.ConfigureKycServices();
 
 // Add AutoMapper to the container.
 builder.Services.AddAutoMapper(cfg => { }, typeof(UserProfile));
