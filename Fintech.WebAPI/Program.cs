@@ -1,14 +1,15 @@
-using Supabase;
+using DotNetEnv.Configuration;
 using Fintech.Application.Interfaces;
 using Fintech.Application.Services;
 using Fintech.Domain.Interfaces;
 using Fintech.Infrastructure.MappingProfiles;
 using Fintech.Infrastructure.Repositories;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.OpenApi.Models;
-using DotNetEnv.Configuration;
-using Microsoft.IdentityModel.Tokens;
 using Fintech.WebAPI;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
+using Supabase;
+using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -35,7 +36,7 @@ builder.Services.AddSingleton(provider => new Client(url, key, options));
 builder.Services.ConfigureKycServices();
 
 // Add AutoMapper to the container.
-builder.Services.AddAutoMapper(cfg => { }, typeof(UserProfile));
+builder.Services.AddAutoMapper(cfg => { }, typeof(UserProfile), typeof(PymeProfile));
 
 // Add repositories to the container.
 builder.Services.AddScoped<IUserRepository, UserRepository>();
@@ -43,6 +44,10 @@ builder.Services.AddScoped<IUserRepository, UserRepository>();
 // Add services to the container.
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
+
+// registrar PymeService y PymeRepository
+builder.Services.AddScoped<IPymeService, PymeService>();
+builder.Services.AddScoped<IPymeRepository, PymeRepository>();
 
 // Add controllers to the container.
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
