@@ -21,9 +21,6 @@ public class UserModel : BaseModel
     [Column("email")]
     public string Email { get; set; } = string.Empty;
 
-    [Column("company_name")]
-    public string CompanyName { get; set; } = string.Empty;
-
     [Column("role")]
     public string Role { get; set; } = "PYME";
 
