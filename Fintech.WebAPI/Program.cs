@@ -9,7 +9,6 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Supabase;
-using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,6 +16,13 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Configuration.AddDotNetEnv();
 
 // Add services to the container.
+
+// Add Cors origins to the container.
+var origins = builder.Configuration["CORS_ORIGINS"];
+if (string.IsNullOrWhiteSpace(origins))
+    throw new Exception("Falta la variable de entorno CORS_ORIGINS");
+
+var corsOrigins = origins.Split(',');
 
 // Add Supabase client to the container.
 var url = builder.Configuration["SUPABASE_URL"];
@@ -110,7 +116,21 @@ builder.Services.AddSwaggerGen(c =>
     });
 });
 
+// Add CORS service to the container.
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowWebApp",
+        policy =>
+        {
+            policy.WithOrigins(corsOrigins)
+                  .AllowAnyHeader()
+                  .AllowAnyMethod();
+        });
+});
+
 var app = builder.Build();
+
+app.UseCors("AllowWebApp");
 
 // Middlewares
 
