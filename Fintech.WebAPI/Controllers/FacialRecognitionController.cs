@@ -15,6 +15,14 @@ public class FacialRecognitionController : ControllerBase
         _deepFaceService = deepFaceService;
     }
 
+    /// <summary>
+    /// Verifica si dos imágenes son similares.
+    /// </summary>
+    /// <param name="img1">Archivo de imagen 1</param>
+    /// <param name="img2">Archivo de imagen 2</param>
+    /// <param name="modelName">Nombre del modelo de reconocimiento facial (default: ArcFace)</param>
+    /// <param name="detectorBackend">Detenctor de caras(default: retinaface)</param>
+    /// <returns>Resultado de la comparación</returns>
     [HttpPost("verify")]
     public async Task<IActionResult> Verify(
         IFormFile img1,
@@ -39,6 +47,12 @@ public class FacialRecognitionController : ControllerBase
         return Ok(result);
     }
 
+    /// <summary>
+    /// Extrae la cara de una imagen.
+    /// </summary>
+    /// <param name="idDocument">Archivo de imagen del documento</param>
+    /// <param name="detectorBackend">Detenctor de caras(default: retinaface)</param>
+    /// <returns>Imagen de la cara extraída</returns>
     [HttpPost("extract_face")]
     public async Task<IActionResult> ExtractFace(
         IFormFile idDocument,
@@ -69,6 +83,14 @@ public class FacialRecognitionController : ControllerBase
         return StatusCode(500, "An unexpected error occurred.");
     }
 
+    /// <summary>
+    /// Verificación de documento y selfie.
+    /// </summary>
+    /// <param name="idDocument">Archivo de imagen del documento</param>
+    /// <param name="selfie">Archivo de imagen del selfie</param>
+    /// <param name="modelName"></param>
+    /// <param name="detectorBackend"></param>
+    /// <returns></returns>
     [HttpPost("verify_face")]
     public async Task<IActionResult> VerifyDocumentAndSelfie(
         IFormFile idDocument,
@@ -100,6 +122,11 @@ public class FacialRecognitionController : ControllerBase
         return Ok(result.VerificationResult);
     }
 
+    /// <summary>
+    /// Redimensiona una imagen.
+    /// </summary>
+    /// <param name="img">Archivo de imagen</param>
+    /// <returns>Imagen redimensionada</returns>
     [HttpPost("resize_image")]
     public async Task<IActionResult> ResizeImage(IFormFile img)
     {

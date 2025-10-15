@@ -21,4 +21,10 @@
     <ProjectReference Include="..\Fintech.Infrastructure\Fintech.Infrastructure.csproj" />
   </ItemGroup>
 
+  <PropertyGroup>
+  <GenerateDocumentationFile>true</GenerateDocumentationFile>
+  <DocumentationFile>API.xml</DocumentationFile>
+  <NoWarn>$(NoWarn);1591</NoWarn>
+</PropertyGroup>
+
 </Project>

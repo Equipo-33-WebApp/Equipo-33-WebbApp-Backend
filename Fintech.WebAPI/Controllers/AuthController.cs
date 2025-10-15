@@ -15,6 +15,11 @@ public class AuthController : ControllerBase
         _authService = authService;
     }
 
+    /// <summary>
+    /// Registrar un nuevo usuario.
+    /// </summary>
+    /// <param name="registerUser">Email y contraseña del nuevo usuario.</param>
+    /// <returns>Información del usuario registrado.</returns>
     [HttpPost("register")]
     public async Task<IActionResult> RegisterAsync(RegisterUserDto registerUser)
     {
@@ -22,6 +27,11 @@ public class AuthController : ControllerBase
         return Ok(user);
     }
 
+    /// <summary>
+    /// Iniciar sesión con email y contraseña.
+    /// </summary>
+    /// <param name="loginUserDto">Email y contraseña del usuario.</param>
+    /// <returns>Mensaje de login exitoso y token de autenticación.</returns>
     [HttpPost("login")]
     public async Task<IActionResult> LoginAsync(LoginUserDto loginUserDto)
     {

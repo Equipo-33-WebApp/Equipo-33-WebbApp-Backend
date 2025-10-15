@@ -85,6 +85,8 @@ builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new() { Title = "API", Version = "v1" });
 
+    c.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, "API.xml"));
+
     var securitySchema = new OpenApiSecurityScheme
     {
         Description = "Autorización JWT usando el esquema Bearer. Ingresa 'Bearer' [espacio] y luego tu token en el campo de abajo. Ejemplo: 'Bearer 12345abcdef'",
