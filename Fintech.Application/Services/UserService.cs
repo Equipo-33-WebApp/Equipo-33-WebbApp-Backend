@@ -40,7 +40,6 @@ public class UserService : IUserService
         return _mapper.Map<UserDto>(createdUser);
     }
 
-    // TODO: Añadir lógica para actualizar un usuario
     public async Task<UserDto?> UpdateAsync(Guid id, UpdateUserDto updateUserDto)
     {
         var user = await _userRepository.GetByIdAsync(id);
@@ -54,7 +53,6 @@ public class UserService : IUserService
         return _mapper.Map<UserDto>(updatedUser);
     }
 
-    // TODO: Añadir lógica para eliminar un usuario
     public async Task DeleteAsync(Guid id)
     {
         await _userRepository.DeleteAsync(id);

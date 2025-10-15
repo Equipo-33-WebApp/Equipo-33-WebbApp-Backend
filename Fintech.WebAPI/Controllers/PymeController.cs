@@ -1,11 +1,8 @@
 ﻿using Fintech.Application.DTOs;
 using Fintech.Application.Interfaces;
-using Fintech.Domain.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System;
 using System.Security.Claims;
-using System.Threading.Tasks;
 
 namespace Fintech.WebAPI.Controllers
 {
@@ -21,6 +18,11 @@ namespace Fintech.WebAPI.Controllers
             _pymeService = pymeService;
         }
 
+        /// <summary>
+        /// Crea una nueva Pyme.
+        /// </summary>
+        /// <param name="dto">El DTO de la Pyme a crear.</param>
+        /// <returns>La Pyme creada.</returns>
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] PymeRequestDto dto)
         {
@@ -67,6 +69,11 @@ namespace Fintech.WebAPI.Controllers
             }
         }
 
+        /// <summary>
+        /// Obtiene una Pyme por su ID.
+        /// </summary>
+        /// <param name="id">ID de la Pyme a obtener.</param>
+        /// <returns>Información de la Pyme.</returns>
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(Guid id)
         {

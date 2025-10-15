@@ -17,6 +17,11 @@ public class TextRecognitionController : ControllerBase
         _deepFaceService = deepFaceService;
     }
 
+    /// <summary>
+    /// Extrae el texto de una imagen.
+    /// </summary>
+    /// <param name="file">Archivo de imagen</param>
+    /// <returns>Texto extraído de la imagen</returns>
     [HttpPost("extract_text")]
     public async Task<IActionResult> ParseImage(IFormFile file)
     {

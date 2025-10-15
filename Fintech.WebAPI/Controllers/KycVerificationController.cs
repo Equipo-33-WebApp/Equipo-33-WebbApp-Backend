@@ -15,6 +15,13 @@ public class KycVerificationController : ControllerBase
         _documentVerificationService = documentVerificationService;
     }
 
+    /// <summary>
+    /// Verificación de documento y selfie.
+    /// </summary>
+    /// <param name="nationalIdNumber">Número de identificación nacional</param>
+    /// <param name="idDocumentFront">Archivo de imagen del documento</param>
+    /// <param name="faceSelfie">Archivo de imagen del selfie</param>
+    /// <returns>Resultado de la verificación</returns>
     [HttpPost("verify_identity")]
     [ProducesResponseType(typeof(KycVerificationResultDto), StatusCodes.Status200OK)]
     public async Task<IActionResult> VerifyIdDocumentAndSelfie(
