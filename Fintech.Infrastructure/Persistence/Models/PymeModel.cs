@@ -3,7 +3,7 @@ using Supabase.Postgrest.Models;
 
 namespace Fintech.Infrastructure.Persistence.Models;
 
-[Table("Pymes")]
+[Table("pymes")]
 public class PymeModel : BaseModel
 {
     [PrimaryKey("id")]
