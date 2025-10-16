@@ -15,8 +15,11 @@ public class UserModel : BaseModel
     [Column("auth_id")]
     public Guid AuthId { get; set; }
 
-    [Column("full_name")]
-    public string FullName { get; set; } = string.Empty;
+    [Column("first_name")]
+    public string FirstName { get; set; } = string.Empty;
+
+    [Column("last_name")]
+    public string LastName { get; set; } = string.Empty;
 
     [Column("email")]
     public string Email { get; set; } = string.Empty;
