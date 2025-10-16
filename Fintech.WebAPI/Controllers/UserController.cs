@@ -34,6 +34,22 @@ public class UserController : ControllerBase
     }
 
     /// <summary>
+    /// Obtener un usuario por su ID de autenticación.
+    /// </summary>
+    /// <param name="authId">ID de autenticación del usuario a obtener.</param>
+    /// <returns>La información del usuario.</returns>
+    [HttpGet("auth/{authId}")]
+    public async Task<ActionResult<UserDto?>> GetByAuthIdAsync(Guid authId)
+    {
+        var response = await _userService.GetByAuthIdAsync(authId);
+        if (response == null)
+        {
+            return NotFound();
+        }
+        return Ok(response);
+    }
+
+    /// <summary>
     /// Obtener todos los usuarios.
     /// </summary>
     /// <returns>La lista de usuarios.</returns>

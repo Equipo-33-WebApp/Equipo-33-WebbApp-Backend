@@ -5,6 +5,7 @@ namespace Fintech.Application.Interfaces;
 public interface IUserService
 {
     Task<UserDto?> GetByIdAsync(Guid id);
+    Task<UserDto?> GetByAuthIdAsync(Guid authId);
     Task<IEnumerable<UserDto>> GetAllAsync();
     Task<UserDto> CreateAsync(CreateUserDto user);
     Task<UserDto?> UpdateAsync(Guid id, UpdateUserDto user);

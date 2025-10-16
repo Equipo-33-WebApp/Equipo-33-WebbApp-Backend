@@ -90,6 +90,13 @@
             <param name="id">ID del usuario a obtener.</param>
             <returns>La información del usuario.</returns>
         </member>
+        <member name="M:Fintech.WebAPI.Controllers.UserController.GetByAuthIdAsync(System.Guid)">
+            <summary>
+            Obtener un usuario por su ID de autenticación.
+            </summary>
+            <param name="authId">ID de autenticación del usuario a obtener.</param>
+            <returns>La información del usuario.</returns>
+        </member>
         <member name="M:Fintech.WebAPI.Controllers.UserController.GetAllAsync">
             <summary>
             Obtener todos los usuarios.

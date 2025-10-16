@@ -27,6 +27,16 @@ public class UserRepository : IUserRepository
         return model != null ? _mapper.Map<User>(model) : null;
     }
 
+    public async Task<User?> GetByAuthIdAsync(Guid authId)
+    {
+        var result = await _supabase.From<UserModel>()
+                .Where(u => u.AuthId == authId)
+                .Get();
+        
+        var model = result.Models.FirstOrDefault();
+        return model != null ? _mapper.Map<User>(model) : null;
+    }
+
     public async Task<IEnumerable<User>> GetAllAsync()
     {
         var result = await _supabase.From<UserModel>().Get();

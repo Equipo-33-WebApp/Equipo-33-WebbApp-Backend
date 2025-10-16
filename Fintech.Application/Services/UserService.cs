@@ -27,6 +27,16 @@ public class UserService : IUserService
         return _mapper.Map<UserDto>(user);
     }
 
+    public async Task<UserDto?> GetByAuthIdAsync(Guid authId)
+    {
+        var user = await _userRepository.GetByAuthIdAsync(authId);
+        if (user == null)
+        {
+            return null;
+        }
+        return _mapper.Map<UserDto>(user);
+    }
+
     public async Task<IEnumerable<UserDto>> GetAllAsync()
     {
         var users = await _userRepository.GetAllAsync();
