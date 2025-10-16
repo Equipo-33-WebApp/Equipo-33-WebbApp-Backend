@@ -14,5 +14,6 @@ public class UserProfile : Profile
             .ForMember(dest => dest.Created_At, opt => opt.MapFrom(_ => DateTime.UtcNow));
 
         CreateMap<User, UserModel>().ReverseMap();
+        CreateMap<UpdateUserDto, User>();
     }
 }
