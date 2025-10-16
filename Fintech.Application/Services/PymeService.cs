@@ -1,8 +1,6 @@
 ﻿using Fintech.Application.DTOs;
 using Fintech.Application.Interfaces;
 using Fintech.Domain.Entities;
-using System;
-using System.Threading.Tasks;
 
 namespace Fintech.Application.Services
 {
@@ -15,12 +13,12 @@ namespace Fintech.Application.Services
             _pymeRepository = pymeRepository;
         }
 
-        public async Task<Pyme> CreateAsync(PymeRequestDto dto, Guid userId)
+        public async Task<Pyme> CreateAsync(PymeRequestDto dto, Guid authId)
         {
             var pyme = new Pyme
             {
                 Id = Guid.NewGuid(),
-                UserId = userId,
+                AuthId = authId,
                 CompanyName = dto.CompanyName,
                 Address = dto.Address,
                 Sector = dto.Sector,
@@ -34,6 +32,11 @@ namespace Fintech.Application.Services
         public async Task<Pyme?> GetByIdAsync(Guid id)
         {
             return await _pymeRepository.GetByIdAsync(id);
+        }
+
+        public async Task<Pyme?> GetByAuthIdAsync(Guid authId)
+        {
+            return await _pymeRepository.GetByAuthIdAsync(authId);
         }
     }
 }

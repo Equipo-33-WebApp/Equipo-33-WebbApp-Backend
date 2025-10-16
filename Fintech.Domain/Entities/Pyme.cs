@@ -2,7 +2,7 @@
 
 public class Pyme : Entity
 {
-    public Guid UserId { get; set; }         
+    public Guid AuthId { get; set; }         
     public string CompanyName { get; set; } = string.Empty;
     public string Address { get; set; } = string.Empty;
     public string Sector { get; set; } = string.Empty;

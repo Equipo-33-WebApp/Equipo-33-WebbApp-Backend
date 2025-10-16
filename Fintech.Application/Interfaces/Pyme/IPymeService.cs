@@ -1,7 +1,5 @@
 ﻿using Fintech.Application.DTOs;
 using Fintech.Domain.Entities;
-using System;
-using System.Threading.Tasks;
 
 namespace Fintech.Application.Interfaces
 {
@@ -9,5 +7,6 @@ namespace Fintech.Application.Interfaces
     {
         Task<Pyme> CreateAsync(PymeRequestDto dto, Guid userId);
         Task<Pyme?> GetByIdAsync(Guid id);
+        Task<Pyme?> GetByAuthIdAsync(Guid authId);
     }
 }

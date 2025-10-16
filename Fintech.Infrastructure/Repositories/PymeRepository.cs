@@ -2,8 +2,6 @@
 using Fintech.Application.Interfaces;
 using Fintech.Domain.Entities;
 using Fintech.Infrastructure.Persistence.Models;
-using System;
-using System.Threading.Tasks;
 
 namespace Fintech.Infrastructure.Repositories
 {
@@ -21,7 +19,7 @@ namespace Fintech.Infrastructure.Repositories
             var model = new PymeModel
             {
                 Id = pyme.Id,
-                UserId = pyme.UserId,
+                AuthId = pyme.AuthId,
                 CompanyName = pyme.CompanyName,
                 Address = pyme.Address,
                 Sector = pyme.Sector,
@@ -42,7 +40,24 @@ namespace Fintech.Infrastructure.Repositories
             return new Pyme
             {
                 Id = result.Id,
-                UserId = result.UserId,
+                AuthId = result.AuthId,
+                CompanyName = result.CompanyName,
+                Address = result.Address,
+                Sector = result.Sector,
+                Employees = result.Employees,
+                Phone = result.Phone
+            };
+        }
+
+        public async Task<Pyme?> GetByAuthIdAsync(Guid authId)
+        {
+            var result = await _client.From<PymeModel>().Where(x => x.AuthId == authId).Single();
+            if (result == null) return null;
+
+            return new Pyme
+            {
+                Id = result.Id,
+                AuthId = result.AuthId,
                 CompanyName = result.CompanyName,
                 Address = result.Address,
                 Sector = result.Sector,

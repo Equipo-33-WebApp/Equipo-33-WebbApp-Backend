@@ -8,5 +8,6 @@ namespace Fintech.Application.Interfaces
     {
         Task<Pyme> AddAsync(Pyme pyme);
         Task<Pyme?> GetByIdAsync(Guid id);
+        Task<Pyme?> GetByAuthIdAsync(Guid authId);
     }
 }

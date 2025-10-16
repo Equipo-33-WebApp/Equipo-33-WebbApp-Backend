@@ -9,8 +9,8 @@ public class PymeModel : BaseModel
     [PrimaryKey("id")]
     public Guid Id { get; set; }
 
-    [Column("user_id")]
-    public Guid UserId { get; set; }
+    [Column("auth_id")]
+    public Guid AuthId { get; set; }
 
     [Column("company_name")]
     public string CompanyName { get; set; } = string.Empty;

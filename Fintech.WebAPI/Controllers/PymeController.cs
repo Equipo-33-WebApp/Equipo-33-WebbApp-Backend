@@ -50,12 +50,12 @@ namespace Fintech.WebAPI.Controllers
             if (string.IsNullOrEmpty(subClaim))
                 return Unauthorized("Revisa si el token es valido");
 
-            if (!Guid.TryParse(subClaim, out var userId))
+            if (!Guid.TryParse(subClaim, out var authId))
                 return Unauthorized("El guid no es valido.");
 
             try
             {
-                var createdPyme = await _pymeService.CreateAsync(dto, userId);
+                var createdPyme = await _pymeService.CreateAsync(dto, authId);
                 return CreatedAtAction(nameof(GetById), new { id = createdPyme.Id }, createdPyme);
             }
             catch (Exception ex)
@@ -90,6 +90,33 @@ namespace Fintech.WebAPI.Controllers
                 return StatusCode(500, new
                 {
                     error = "Error interno al consultar la Pyme. Revisa la conexion con supabase y politica RLS",
+                    message = ex.Message,
+                    stackTrace = ex.StackTrace
+                });
+            }
+        }
+
+        /// <summary>
+        /// Obtiene una Pyme por su ID de autenticación.
+        /// </summary>
+        /// <param name="authId">ID de autenticación de la Pyme a obtener.</param>
+        /// <returns>Información de la Pyme.</returns>
+        [HttpGet("auth/{authId}")]
+        public async Task<IActionResult> GetByAuthId(Guid authId)
+        {
+            try
+            {
+                var pyme = await _pymeService.GetByAuthIdAsync(authId);
+                if (pyme == null)
+                    return NotFound("No se encontre la pyme ingresada");
+
+                return Ok(pyme);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new
+                {
+                    error = "Errorinterno al consultar la Pyme. Revisa la conexion con supabase y politica RLS",
                     message = ex.Message,
                     stackTrace = ex.StackTrace
                 });

@@ -76,6 +76,13 @@
             <param name="id">ID de la Pyme a obtener.</param>
             <returns>Información de la Pyme.</returns>
         </member>
+        <member name="M:Fintech.WebAPI.Controllers.PymesController.GetByAuthId(System.Guid)">
+            <summary>
+            Obtiene una Pyme por su ID de autenticación.
+            </summary>
+            <param name="authId">ID de autenticación de la Pyme a obtener.</param>
+            <returns>Información de la Pyme.</returns>
+        </member>
         <member name="M:Fintech.WebAPI.Controllers.TextRecognitionController.ParseImage(Microsoft.AspNetCore.Http.IFormFile)">
             <summary>
             Extrae el texto de una imagen.
