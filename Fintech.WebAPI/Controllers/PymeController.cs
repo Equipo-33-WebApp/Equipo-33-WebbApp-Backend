@@ -19,6 +19,49 @@ namespace Fintech.WebAPI.Controllers
         }
 
         /// <summary>
+        /// Obtiene una Pyme por su ID.
+        /// </summary>
+        /// <param name="id">ID de la Pyme a obtener.</param>
+        /// <returns>Información de la Pyme.</returns>
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetById(Guid id)
+        {
+            try
+            {
+                var pyme = await _pymeService.GetByIdAsync(id);
+                if (pyme == null)
+                    return NotFound("No se encontre la pyme ingresada");
+
+                return Ok(pyme);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new
+                {
+                    error = "Error interno al consultar la Pyme. Revisa la conexion con supabase y politica RLS",
+                    message = ex.Message,
+                    stackTrace = ex.StackTrace
+                });
+            }
+        }
+
+        /// <summary>
+        /// Obtiene una Pyme por su ID de autenticación.
+        /// </summary>
+        /// <param name="authId">ID de autenticación de la Pyme a obtener.</param>
+        /// <returns>Información de la Pyme.</returns>
+        [HttpGet("auth/{authId}")]
+        public async Task<ActionResult<PymeRequestDto>> GetByAuthId(Guid authId)
+        {
+            var response = await _pymeService.GetByAuthIdAsync(authId);
+            if (response == null)
+            {
+                return NotFound();
+            }
+            return Ok(response);
+        }
+
+        /// <summary>
         /// Crea una nueva Pyme.
         /// </summary>
         /// <param name="dto">El DTO de la Pyme a crear.</param>
@@ -55,6 +98,12 @@ namespace Fintech.WebAPI.Controllers
 
             try
             {
+                var existingPyme = await _pymeService.GetByAuthIdAsync(authId);
+                if (existingPyme != null)
+                {
+                    return Conflict("El usuario ya tiene una PYME registrada.");
+                }
+
                 var createdPyme = await _pymeService.CreateAsync(dto, authId);
                 return CreatedAtAction(nameof(GetById), new { id = createdPyme.Id }, createdPyme);
             }
@@ -70,57 +119,33 @@ namespace Fintech.WebAPI.Controllers
         }
 
         /// <summary>
-        /// Obtiene una Pyme por su ID.
+        /// Actualiza una Pyme por su ID.
         /// </summary>
-        /// <param name="id">ID de la Pyme a obtener.</param>
-        /// <returns>Información de la Pyme.</returns>
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetById(Guid id)
+        /// <param name="authId">ID de autenticación de la Pyme a actualizar.</param>
+        /// <param name="dto">El DTO de la Pyme a actualizar.</param>
+        /// <returns>La Pyme actualizada.</returns>
+        [HttpPut("{authId}")]
+        public async Task<ActionResult<PymeRequestDto>> Update(Guid authId, [FromBody] UpdatePymeDto dto)
         {
-            try
+            var updatedPyme = await _pymeService.UpdateAsync(authId, dto);
+            if (updatedPyme == null)
             {
-                var pyme = await _pymeService.GetByIdAsync(id);
-                if (pyme == null)
-                    return NotFound("No se encontre la pyme ingresada");
+                return NotFound();
+            }
 
-                return Ok(pyme);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new
-                {
-                    error = "Error interno al consultar la Pyme. Revisa la conexion con supabase y politica RLS",
-                    message = ex.Message,
-                    stackTrace = ex.StackTrace
-                });
-            }
+            return Ok(updatedPyme);
         }
 
         /// <summary>
-        /// Obtiene una Pyme por su ID de autenticación.
+        /// Elimina una Pyme por su ID.
         /// </summary>
-        /// <param name="authId">ID de autenticación de la Pyme a obtener.</param>
-        /// <returns>Información de la Pyme.</returns>
-        [HttpGet("auth/{authId}")]
-        public async Task<IActionResult> GetByAuthId(Guid authId)
+        /// <param name="id">ID de la Pyme a eliminar.</param>
+        /// <returns>Respuesta sin contenido.</returns>
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(Guid id)
         {
-            try
-            {
-                var pyme = await _pymeService.GetByAuthIdAsync(authId);
-                if (pyme == null)
-                    return NotFound("No se encontre la pyme ingresada");
-
-                return Ok(pyme);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new
-                {
-                    error = "Errorinterno al consultar la Pyme. Revisa la conexion con supabase y politica RLS",
-                    message = ex.Message,
-                    stackTrace = ex.StackTrace
-                });
-            }
+            await _pymeService.DeleteAsync(id);
+            return NoContent();
         }
     }
 }

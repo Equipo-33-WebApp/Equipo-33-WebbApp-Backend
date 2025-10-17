@@ -9,5 +9,6 @@ public class PymeProfile : Profile
     {
         CreateMap<PymeRequestDto, Pyme>();
         CreateMap<Pyme, PymeModel>().ReverseMap();
+        CreateMap<UpdatePymeDto, Pyme>();
     }
 }

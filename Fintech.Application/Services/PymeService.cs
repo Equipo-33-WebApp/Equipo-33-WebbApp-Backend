@@ -1,4 +1,5 @@
-﻿using Fintech.Application.DTOs;
+﻿using AutoMapper;
+using Fintech.Application.DTOs;
 using Fintech.Application.Interfaces;
 using Fintech.Domain.Entities;
 
@@ -7,10 +8,23 @@ namespace Fintech.Application.Services
     public class PymeService : IPymeService
     {
         private readonly IPymeRepository _pymeRepository;
+        private readonly IMapper _mapper;
 
-        public PymeService(IPymeRepository pymeRepository)
+
+        public PymeService(IPymeRepository pymeRepository, IMapper mapper)
         {
             _pymeRepository = pymeRepository;
+            _mapper = mapper;
+        }
+
+        public async Task<Pyme?> GetByIdAsync(Guid id)
+        {
+            return await _pymeRepository.GetByIdAsync(id);
+        }
+
+        public async Task<Pyme?> GetByAuthIdAsync(Guid authId)
+        {
+            return await _pymeRepository.GetByAuthIdAsync(authId);
         }
 
         public async Task<Pyme> CreateAsync(PymeRequestDto dto, Guid authId)
@@ -29,14 +43,22 @@ namespace Fintech.Application.Services
             return await _pymeRepository.AddAsync(pyme);
         }
 
-        public async Task<Pyme?> GetByIdAsync(Guid id)
+        public async Task<Pyme?> UpdateAsync(Guid authId, UpdatePymeDto dto)
         {
-            return await _pymeRepository.GetByIdAsync(id);
+            var pyme = await _pymeRepository.GetByAuthIdAsync(authId);
+            if (pyme == null)
+            {
+                return null;
+            }
+
+            _mapper.Map(dto, pyme);
+            var updatedPyme = await _pymeRepository.UpdateAsync(pyme);
+            return _mapper.Map<Pyme>(updatedPyme);
         }
 
-        public async Task<Pyme?> GetByAuthIdAsync(Guid authId)
+        public async Task DeleteAsync(Guid authId)
         {
-            return await _pymeRepository.GetByAuthIdAsync(authId);
+            await _pymeRepository.DeleteAsync(authId);
         }
     }
 }

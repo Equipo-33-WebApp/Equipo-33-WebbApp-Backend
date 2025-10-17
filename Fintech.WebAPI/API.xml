@@ -62,13 +62,6 @@
             <param name="faceSelfie">Archivo de imagen del selfie</param>
             <returns>Resultado de la verificación</returns>
         </member>
-        <member name="M:Fintech.WebAPI.Controllers.PymesController.Create(Fintech.Application.DTOs.PymeRequestDto)">
-            <summary>
-            Crea una nueva Pyme.
-            </summary>
-            <param name="dto">El DTO de la Pyme a crear.</param>
-            <returns>La Pyme creada.</returns>
-        </member>
         <member name="M:Fintech.WebAPI.Controllers.PymesController.GetById(System.Guid)">
             <summary>
             Obtiene una Pyme por su ID.
@@ -82,6 +75,28 @@
             </summary>
             <param name="authId">ID de autenticación de la Pyme a obtener.</param>
             <returns>Información de la Pyme.</returns>
+        </member>
+        <member name="M:Fintech.WebAPI.Controllers.PymesController.Create(Fintech.Application.DTOs.PymeRequestDto)">
+            <summary>
+            Crea una nueva Pyme.
+            </summary>
+            <param name="dto">El DTO de la Pyme a crear.</param>
+            <returns>La Pyme creada.</returns>
+        </member>
+        <member name="M:Fintech.WebAPI.Controllers.PymesController.Update(System.Guid,Fintech.Application.DTOs.UpdatePymeDto)">
+            <summary>
+            Actualiza una Pyme por su ID.
+            </summary>
+            <param name="authId">ID de autenticación de la Pyme a actualizar.</param>
+            <param name="dto">El DTO de la Pyme a actualizar.</param>
+            <returns>La Pyme actualizada.</returns>
+        </member>
+        <member name="M:Fintech.WebAPI.Controllers.PymesController.Delete(System.Guid)">
+            <summary>
+            Elimina una Pyme por su ID.
+            </summary>
+            <param name="id">ID de la Pyme a eliminar.</param>
+            <returns>Respuesta sin contenido.</returns>
         </member>
         <member name="M:Fintech.WebAPI.Controllers.TextRecognitionController.ParseImage(Microsoft.AspNetCore.Http.IFormFile)">
             <summary>
