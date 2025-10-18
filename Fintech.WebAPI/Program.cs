@@ -20,7 +20,7 @@ builder.Configuration.AddDotNetEnv();
 // Add Cors origins to the container.
 var origins = builder.Configuration["CORS_ORIGINS"];
 if (string.IsNullOrWhiteSpace(origins))
-    throw new Exception("Falta la variable de entorno CORS_ORIGINS");
+   throw new Exception("Falta la variable de entorno CORS_ORIGINS");
 
 var corsOrigins = origins.Split(',');
 
@@ -39,7 +39,7 @@ var options = new SupabaseOptions
 };
 builder.Services.AddSingleton(provider => new Client(url, key, options));
 
-builder.Services.ConfigureKycServices();
+builder.Services.ConfigureServices();
 
 // Add AutoMapper to the container.
 builder.Services.AddAutoMapper(cfg => { }, typeof(UserProfile), typeof(PymeProfile));
@@ -121,13 +121,13 @@ builder.Services.AddSwaggerGen(c =>
 // Add CORS service to the container.
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowWebApp",
-        policy =>
-        {
-            policy.WithOrigins(corsOrigins)
-                  .AllowAnyHeader()
-                  .AllowAnyMethod();
-        });
+   options.AddPolicy("AllowWebApp",
+       policy =>
+       {
+           policy.WithOrigins(corsOrigins)
+                 .AllowAnyHeader()
+                 .AllowAnyMethod();
+       });
 });
 
 var app = builder.Build();
