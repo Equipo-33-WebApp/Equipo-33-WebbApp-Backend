@@ -1,11 +1,13 @@
 using Fintech.Application.DTOs.KycValidation;
 using Fintech.Application.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Fintech.WebAPI.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
+[Authorize]
 public class KycVerificationController : ControllerBase
 {
     private readonly IKycVerificationService _documentVerificationService;

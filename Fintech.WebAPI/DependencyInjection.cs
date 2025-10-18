@@ -1,6 +1,9 @@
 ﻿using Fintech.Application.Interfaces;
+using Fintech.Application.Interfaces.CreditApplication;
 using Fintech.Application.Services;
 using Fintech.Infrastructure.Interfaces;
+using Fintech.Infrastructure.MappingProfiles;
+using Fintech.Infrastructure.Repositories;
 using Fintech.Infrastructure.Service;
 using Refit;
 
@@ -8,6 +11,20 @@ namespace Fintech.WebAPI;
 
 public static class DependencyInjection
 {
+    public static IServiceCollection ConfigureServices(this IServiceCollection services)
+    {
+        
+        services.AddRouting(options =>
+        {
+            options.LowercaseUrls = true;
+            options.LowercaseQueryStrings = false;
+        });
+        services.ConfigureKycServices();
+        services.ConfigureAuditServices();
+
+        return services;
+    }
+
     public static IServiceCollection ConfigureKycServices(this IServiceCollection services)
     {
         var deepFaceApiBaseUrl = Environment.GetEnvironmentVariable("DEEPFACE_API_URL") ?? "http://localhost:5000";
@@ -23,6 +40,17 @@ public static class DependencyInjection
         services.AddScoped<IFacialRecognitionService, DeepFaceService>();
         services.AddScoped<ITextRecognitionService, OcrSpaceService>();
         services.AddScoped<IKycVerificationService, KycVerificationService>();
+
+
+        return services;
+    }
+
+    public static IServiceCollection ConfigureAuditServices(this IServiceCollection services)
+    {
+        services.AddScoped<ISignatureRepository, SignatureRepository>();
+        services.AddScoped<ISignatureService, SignatureService>();
+
+        services.AddAutoMapper(cfg => { }, typeof(AuditAcceptanceProfile));
 
         return services;
     }
