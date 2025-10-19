@@ -112,7 +112,7 @@
             <param name="request">Información a validar</param>
             <returns>Resultado de la validación de firma</returns>
         </member>
-        <member name="M:Fintech.WebAPI.Controllers.SignatureController.SignDocument(Microsoft.AspNetCore.Http.IFormFile,System.Guid,System.Guid)">
+        <member name="M:Fintech.WebAPI.Controllers.SignatureController.SignDocument(Microsoft.AspNetCore.Http.IFormFile,System.Guid)">
             <summary>
             Firma la aceptación del crédito.
             </summary>

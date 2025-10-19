@@ -11,7 +11,6 @@ namespace Fintech.Infrastructure.Repositories
         private readonly Client _client;
         private readonly IMapper _mapper;
 
-
         public PymeRepository(Client client, IMapper mapper)
         {
             _client = client;
@@ -67,7 +66,7 @@ namespace Fintech.Infrastructure.Repositories
         public async Task<bool> VerifyAsync()
         {
             var user = _client.Auth.CurrentUser;
-            if (user == null)
+            if (user == null || string.IsNullOrEmpty(user.Id))
                 throw new InvalidOperationException("No authenticated user found.");
 
             var authId = Guid.Parse(user.Id);

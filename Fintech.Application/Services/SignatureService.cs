@@ -19,7 +19,6 @@ public class SignatureService(ISignatureRepository _signatureRepository, IMapper
     {
         if (string.IsNullOrEmpty(auditAcceptanceDto.DocumentText)) return new SignAgreementDto() { Message = INVALID_TEXT };
         if (auditAcceptanceDto.CreditId == Guid.Empty) return new SignAgreementDto() { Message = INVALID_CREDITID };
-        if (auditAcceptanceDto.UserId == Guid.Empty) return new SignAgreementDto() { Message = INVALID_USERID };
 
         var auditAcceptance = _mapper.Map<AuditAcceptance>(auditAcceptanceDto);
         var creditApp = await _signatureRepository.CreateAsync(auditAcceptance);
@@ -62,7 +61,6 @@ public class SignatureService(ISignatureRepository _signatureRepository, IMapper
     {
         if (auditDocumentDto.DocumentHash == null) return new SignDocumentDto() { Message = INVALID_DOCUMENT };
         if (auditDocumentDto.CreditId == Guid.Empty) return new SignDocumentDto() { Message = INVALID_CREDITID };
-        if (auditDocumentDto.UserId == Guid.Empty) return new SignDocumentDto() { Message = INVALID_USERID };
 
         var auditAcceptance = _mapper.Map<AuditAcceptance>(auditDocumentDto);
         var creditApp = await _signatureRepository.CreateAsync(auditAcceptance);

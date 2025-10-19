@@ -26,7 +26,6 @@ public class SignatureController(ISignatureService _creditApplicationService) : 
 
         var auditAcceptance = new AuditAcceptanceDto
         {
-            UserId = request.UserId,
             CreditId = request.CreditId,
             DocumentText = request.DocumentText,
             Host = host,
@@ -64,14 +63,13 @@ public class SignatureController(ISignatureService _creditApplicationService) : 
     /// <returns>Resultado de la firma</returns>
     [HttpPost("SignFile")]
     [ProducesResponseType(typeof(AuditAcceptanceDto), StatusCodes.Status200OK)]
-    public async Task<IActionResult> SignDocument(IFormFile file, [FromForm] Guid creditId, [FromForm] Guid userId)
+    public async Task<IActionResult> SignDocument(IFormFile file, [FromForm] Guid creditId)
     {
         string host = Request.Headers.Host.ToString();
         string userAgent = Request.Headers.UserAgent.ToString();
         string documentHash = await HashHelper.ComputeSha256Async(file.OpenReadStream());
         var auditAcceptance = new AuditDocumentDto
         {
-            UserId = userId,
             CreditId = creditId,
             DocumentHash = documentHash,
             Host = host,

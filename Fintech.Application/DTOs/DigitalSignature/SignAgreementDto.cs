@@ -3,7 +3,6 @@
 public class SignAgreementRequest
 {
     public Guid CreditId { get; set; }
-    public Guid UserId { get; set; }
     public string DocumentText { get; set; } = string.Empty;
 }
 

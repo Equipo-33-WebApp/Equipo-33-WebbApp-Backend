@@ -10,7 +10,14 @@ public class SignatureRepository(Client _supabase, IMapper _mapper) : ISignature
 {
     public async Task<AuditAcceptance> CreateAsync(AuditAcceptance auditAcceptance)
     {
+        var user = _supabase.Auth.CurrentUser;
+        if (user == null || string.IsNullOrEmpty(user.Id))
+            throw new InvalidOperationException("No authenticated user found.");
+
+        var authId = Guid.Parse(user.Id);
+
         var model = _mapper.Map<AuditAcceptanceModel>(auditAcceptance);
+        model.UserId = authId;
         var inserted = await _supabase.From<AuditAcceptanceModel>().Insert(model);
         return _mapper.Map<AuditAcceptance>(inserted.Models.FirstOrDefault());
     }
