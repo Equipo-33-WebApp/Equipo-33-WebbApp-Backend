@@ -63,5 +63,22 @@ namespace Fintech.Infrastructure.Repositories
         {
             await _client.From<PymeModel>().Where(x => x.AuthId == authId).Delete();
         }
+
+        public async Task<bool> VerifyAsync()
+        {
+            var user = _client.Auth.CurrentUser;
+            if (user == null)
+                throw new InvalidOperationException("No authenticated user found.");
+
+            var authId = Guid.Parse(user.Id);
+
+            var response = await _client
+                .From<PymeKycModel>()
+                .Where(x => x.AuthId == authId)
+                .Set(x => x.HasKycValidated, true)
+                .Update();
+
+            return response.Models.Any();
+        }
     }
 }

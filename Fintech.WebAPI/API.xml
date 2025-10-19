@@ -98,6 +98,20 @@
             <param name="id">ID de la Pyme a eliminar.</param>
             <returns>Respuesta sin contenido.</returns>
         </member>
+        <member name="M:Fintech.WebAPI.Controllers.SignatureController.SignAgreement(Fintech.Application.DTOs.Signature.SignAgreementRequest)">
+            <summary>
+            Firma la aceptación del crédito.
+            </summary>
+            <param name="request">Información a firmar</param>
+            <returns>Resultado de la firma</returns>
+        </member>
+        <member name="M:Fintech.WebAPI.Controllers.SignatureController.VerifySignature(Fintech.Application.DTOs.VerifySignatureRequest)">
+            <summary>
+            Validación de la firma del crédito.
+            </summary>
+            <param name="request">Información a validar</param>
+            <returns>Resultado de la validación de firma</returns>
+        </member>
         <member name="M:Fintech.WebAPI.Controllers.TextRecognitionController.ParseImage(Microsoft.AspNetCore.Http.IFormFile)">
             <summary>
             Extrae el texto de una imagen.

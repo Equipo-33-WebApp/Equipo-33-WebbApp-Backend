@@ -29,4 +29,7 @@ public class PymeModel : BaseModel
 
     [Column("created_at")]
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+
+    [Column("has_kyc_validated")]
+    public bool HasKycValidated { get; set; }
 }

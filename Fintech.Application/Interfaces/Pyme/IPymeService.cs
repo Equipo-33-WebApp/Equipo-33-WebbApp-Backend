@@ -10,5 +10,6 @@ namespace Fintech.Application.Interfaces
         Task<Pyme> CreateAsync(PymeRequestDto dto, Guid authId);
         Task<Pyme?> UpdateAsync(Guid authId, UpdatePymeDto dto);
         Task DeleteAsync(Guid authId);
+        Task<bool> VerifyAsync();
     }
 }

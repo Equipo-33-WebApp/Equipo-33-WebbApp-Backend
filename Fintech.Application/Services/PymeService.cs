@@ -60,5 +60,10 @@ namespace Fintech.Application.Services
         {
             await _pymeRepository.DeleteAsync(authId);
         }
+
+        public async Task<bool> VerifyAsync()
+        {
+            return await _pymeRepository.VerifyAsync();
+        }
     }
 }
