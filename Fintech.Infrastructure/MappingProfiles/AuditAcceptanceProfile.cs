@@ -12,14 +12,27 @@ public class AuditAcceptanceProfile : Profile
     public AuditAcceptanceProfile()
     {
         CreateMap<AuditAcceptanceDto, AuditAcceptance>()
-            .ForMember(dest => dest.DocumentHash, opt => opt.MapFrom(opt => HashHelper.ComputeSha256(opt.DocumentText)));
+            .ForMember(dest => dest.DocumentHash, opt =>
+                opt.MapFrom(src =>
+                    string.IsNullOrEmpty(src.DocumentHash)
+                        ? HashHelper.ComputeSha256(src.DocumentText)
+                        : src.DocumentHash
+                ));
         CreateMap<AuditAcceptance, AuditAcceptanceDto>();
 
 
         CreateMap<SignatureDto, AuditAcceptance>()
-            .ForMember(dest => dest.DocumentHash, opt => opt.MapFrom(opt => HashHelper.ComputeSha256(opt.DocumentText)));
+            .ForMember(dest => dest.DocumentHash, opt =>
+                opt.MapFrom(src =>
+                    string.IsNullOrEmpty(src.DocumentHash)
+                        ? HashHelper.ComputeSha256(src.DocumentText)
+                        : src.DocumentHash
+                ));
         CreateMap<AuditAcceptance, SignatureDto>();
 
         CreateMap<AuditAcceptance, AuditAcceptanceModel>().ReverseMap();
+
+        CreateMap<AuditDocumentDto, AuditAcceptance>();
+        CreateMap<AuditAcceptance, AuditDocumentDto>();
     }
 }

@@ -100,14 +100,39 @@
         </member>
         <member name="M:Fintech.WebAPI.Controllers.SignatureController.SignAgreement(Fintech.Application.DTOs.Signature.SignAgreementRequest)">
             <summary>
-            Firma la aceptación del crédito.
+            Firma la aceptación de terminos y condiciones.
             </summary>
             <param name="request">Información a firmar</param>
             <returns>Resultado de la firma</returns>
         </member>
-        <member name="M:Fintech.WebAPI.Controllers.SignatureController.VerifySignature(Fintech.Application.DTOs.VerifySignatureRequest)">
+        <member name="M:Fintech.WebAPI.Controllers.SignatureController.VerifySignature(Fintech.Application.DTOs.VerifyTextSignatureRequest)">
+            <summary>
+            Validación de la firma de terminos y condiciones.
+            </summary>
+            <param name="request">Información a validar</param>
+            <returns>Resultado de la validación de firma</returns>
+        </member>
+        <member name="M:Fintech.WebAPI.Controllers.SignatureController.SignDocument(Microsoft.AspNetCore.Http.IFormFile,System.Guid,System.Guid)">
+            <summary>
+            Firma la aceptación del crédito.
+            </summary>
+            <param name="file">Archivo del documento a firmar.</param>
+            <param name="creditId">ID del crédito.</param>
+            <param name="userId">ID del usuario.</param>
+            <returns>Resultado de la firma</returns>
+        </member>
+        <member name="M:Fintech.WebAPI.Controllers.SignatureController.VerifyFileSignature(Microsoft.AspNetCore.Http.IFormFile,System.Guid,System.Guid)">
             <summary>
             Validación de la firma del crédito.
+            </summary>
+            <param name="file">Archivo del documento a validar.</param>
+            <param name="creditId">ID del crédito.</param>
+            <param name="userId">ID del usuario.</param>
+            <returns>Resultado de la validación de firma</returns>
+        </member>
+        <member name="M:Fintech.WebAPI.Controllers.SignatureController.VerifyHashSignature(Fintech.Application.DTOs.VerifySignatureRequest)">
+            <summary>
+            Validación de la firma.
             </summary>
             <param name="request">Información a validar</param>
             <returns>Resultado de la validación de firma</returns>
