@@ -11,7 +11,6 @@ namespace Fintech.Infrastructure.Repositories
         private readonly Client _client;
         private readonly IMapper _mapper;
 
-
         public PymeRepository(Client client, IMapper mapper)
         {
             _client = client;
@@ -62,6 +61,23 @@ namespace Fintech.Infrastructure.Repositories
         public async Task DeleteAsync(Guid authId)
         {
             await _client.From<PymeModel>().Where(x => x.AuthId == authId).Delete();
+        }
+
+        public async Task<bool> VerifyAsync()
+        {
+            var user = _client.Auth.CurrentUser;
+            if (user == null || string.IsNullOrEmpty(user.Id))
+                throw new InvalidOperationException("No authenticated user found.");
+
+            var authId = Guid.Parse(user.Id);
+
+            var response = await _client
+                .From<PymeKycModel>()
+                .Where(x => x.AuthId == authId)
+                .Set(x => x.HasKycValidated, true)
+                .Update();
+
+            return response.Models.Any();
         }
     }
 }

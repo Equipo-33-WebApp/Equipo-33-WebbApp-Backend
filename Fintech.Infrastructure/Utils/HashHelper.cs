@@ -15,4 +15,14 @@ public static class HashHelper
         byte[] hash = sha256.ComputeHash(bytes);
         return Convert.ToHexString(hash).ToLowerInvariant();
     }
+
+    public static async Task<string> ComputeSha256Async(Stream stream)
+    {
+        if (stream == null || stream.Length == 0)
+            return string.Empty;
+
+        using var sha256 = SHA256.Create();
+        byte[] hash = await sha256.ComputeHashAsync(stream);
+        return Convert.ToHexString(hash).ToLowerInvariant();
+    }
 }

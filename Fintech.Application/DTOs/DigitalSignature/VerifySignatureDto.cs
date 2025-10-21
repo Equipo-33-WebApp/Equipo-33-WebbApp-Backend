@@ -1,6 +1,6 @@
 ﻿namespace Fintech.Application.DTOs;
 
-public class VerifySignatureRequest
+public class VerifyTextSignatureRequest
 {
     public Guid CreditId { get; set; }
     public Guid UserId { get; set; }
@@ -25,4 +25,11 @@ public class VerifySignatureDto
     public bool IsValid { get; set; }
     public string Message { get; set; } = string.Empty;
     public SignatureDto? Signature { get; set; }
+}
+
+public class VerifySignatureRequest
+{
+    public Guid CreditId { get; set; }
+    public Guid UserId { get; set; }
+    public string DocumentHash { get; set; } = string.Empty;
 }
