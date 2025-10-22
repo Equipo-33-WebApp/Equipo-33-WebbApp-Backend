@@ -64,15 +64,13 @@ builder.Services.AddAutoMapper(cfg => { }, typeof(UserProfile), typeof(PymeProfi
 // Add repositories to the container.
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IAmlRepository, AmlRepository>();
+builder.Services.AddScoped<IPymeRepository, PymeRepository>();
 
 // Add services to the container.
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IAmlService, AmlService>();
-
-// registrar PymeService y PymeRepository
 builder.Services.AddScoped<IPymeService, PymeService>();
-builder.Services.AddScoped<IPymeRepository, PymeRepository>();
 
 // Add controllers to the container.
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)

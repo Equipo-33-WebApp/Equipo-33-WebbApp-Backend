@@ -21,10 +21,9 @@ public class AmlController : ControllerBase
     /// <summary>
     /// Realiza una verificación AML para un usuario.
     /// </summary>
-    /// <param name="amlRequest">Datos de la solicitud AML.</param>
     /// <returns>Resultado de la verificación AML.</returns>
     [HttpPost("check")]
-    public async Task<ActionResult<AmlResultDto>> CheckAmlAsync([FromBody] AmlRequestDto amlRequest)
+    public async Task<ActionResult<AmlResultDto>> CheckAmlAsync()
     {
         var subClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value
                        ?? User.FindFirst("sub")?.Value;
@@ -38,7 +37,8 @@ public class AmlController : ControllerBase
         {
             return BadRequest("El ID de usuario en el token no es un GUID válido.");
         }
-        var result = await _amlService.CheckAsync(amlRequest, authId);
+
+        var result = await _amlService.CheckAsync(authId);
         return Ok(result);
     }
 

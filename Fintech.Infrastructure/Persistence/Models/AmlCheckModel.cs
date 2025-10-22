@@ -15,20 +15,20 @@ public class AmlCheckModel : BaseModel
     [Column("auth_id")]
     public Guid AuthId { get; set; }
 
-    [Column("full_name")]
-    public string FullName { get; set; } = string.Empty;
+    [Column("pyme_id")]
+    public Guid PymeId { get; set; }
 
-    [Column("document_number")]
-    public string? DocumentNumber { get; set; } = string.Empty;
-
-    [Column("country")]
-    public string Country { get; set; } = string.Empty;
+    [Column("flags")]
+    public List<string> Flags { get; set; } = new List<string>();
 
     [Column("risk_level")]
     public string RiskLevel { get; set; } = "Unknown";
 
     [Column("result_summary")]
     public string ResultSummary { get; set; } = string.Empty;
+
+    [Column("requires_manual_review")]
+    public bool RequiresManualReview { get; set; } = false;
 
     [Column("created_at")]
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;

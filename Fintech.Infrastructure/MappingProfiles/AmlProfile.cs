@@ -9,9 +9,6 @@ public class AmlProfile : Profile
 {
     public AmlProfile()
     {
-        CreateMap<AmlRequestDto, AmlCheckModel>()
-            .ForMember(dest => dest.DocumentNumber, opt => opt.MapFrom(src => src.DocumentNumber ?? ""));
-
         CreateMap<AmlCheck, AmlCheckModel>().ReverseMap();
 
         CreateMap<AmlCheck, AmlResultDto>();

@@ -33,6 +33,16 @@ public class AmlRepository : IAmlRepository
         return _mapper.Map<IEnumerable<AmlCheck>>(models);
     }
 
+    public async Task<IEnumerable<AmlCheck>> GetAllByPymeIdsync(Guid pymeId)
+    {
+        var result = await _supabase.From<AmlCheckModel>()
+                .Where(a => a.PymeId == pymeId)
+                .Get();
+
+        var models = result.Models;
+        return _mapper.Map<IEnumerable<AmlCheck>>(models);
+    }
+
     public async Task<AmlCheck?> GetByIdAsync(Guid id)
     {
         var result = await _supabase.From<AmlCheckModel>()

@@ -4,11 +4,10 @@
         <name>Fintech.WebAPI</name>
     </assembly>
     <members>
-        <member name="M:Fintech.WebAPI.Controllers.AmlController.CheckAmlAsync(Fintech.Application.DTOs.Aml.AmlRequestDto)">
+        <member name="M:Fintech.WebAPI.Controllers.AmlController.CheckAmlAsync">
             <summary>
             Realiza una verificación AML para un usuario.
             </summary>
-            <param name="amlRequest">Datos de la solicitud AML.</param>
             <returns>Resultado de la verificación AML.</returns>
         </member>
         <member name="M:Fintech.WebAPI.Controllers.AmlController.GetMyChecksAsync">

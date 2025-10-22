@@ -1,8 +1,10 @@
 namespace Fintech.Application.DTOs.Aml;
 
-public class AmlRequestDto
+public class GeminiAmlRequestDto
 {
-    public string FullName { get; set; } = string.Empty;
-    public string? DocumentNumber { get; set; } = string.Empty;
-    public string Country { get; set; } = string.Empty;
+    public string CompanyName { get; set; } = string.Empty;
+    public string Address { get; set; } = string.Empty;
+    public string Sector { get; set; } = string.Empty;
+    public int Employees { get; set; } = 0;
+    public string Phone { get; set; } = string.Empty;
 }

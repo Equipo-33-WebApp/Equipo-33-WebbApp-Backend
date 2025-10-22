@@ -1,6 +1,7 @@
 using AutoMapper;
 using Fintech.Application.DTOs.Aml;
 using Fintech.Application.Interfaces.Aml;
+using Fintech.Application.Interfaces;
 using Fintech.Domain.Entities;
 using Fintech.Domain.Interfaces;
 
@@ -11,27 +12,44 @@ public class AmlService : IAmlService
     private readonly IAmlRepository _amlRepository;
     private readonly IGeminiAmlService _geminiAmlService;
     private readonly IMapper _mapper;
+    private readonly IPymeRepository _pymeRepository;
 
-    public AmlService(IAmlRepository amlRepository, IGeminiAmlService geminiAmlService, IMapper mapper)
+    public AmlService(IAmlRepository amlRepository, IGeminiAmlService geminiAmlService, IMapper mapper, IPymeRepository pymeRepository)
     {
         _amlRepository = amlRepository;
         _geminiAmlService = geminiAmlService;
         _mapper = mapper;
+        _pymeRepository = pymeRepository;
     }
 
-    public async Task<AmlResultDto> CheckAsync(AmlRequestDto req, Guid authId)
+    public async Task<AmlResultDto> CheckAsync(Guid authId)
     {
-        (string riskLevel, string resultSummary) = await _geminiAmlService.AnalyzeAsync(req.FullName, req.DocumentNumber ?? "", req.Country);
+        var pyme = await _pymeRepository.GetByAuthIdAsync(authId);
+        if (pyme == null)
+        {
+            throw new Exception("No se encontró una PYME asociada al usuario autenticado.");
+        }
+
+        var geminiRequest = new GeminiAmlRequestDto
+        {
+            CompanyName = pyme.CompanyName,
+            Address = pyme.Address,
+            Sector = pyme.Sector,
+            Employees = pyme.Employees,
+            Phone = pyme.Phone
+        };
+
+        var geminiResponse = await _geminiAmlService.AnalyzeAsync(geminiRequest);
 
         var amlCheck = new AmlCheck
         {
             Id = Guid.NewGuid(),
             AuthId = authId,
-            FullName = req.FullName,
-            DocumentNumber = req.DocumentNumber ?? "",
-            Country = req.Country,
-            RiskLevel = riskLevel,
-            ResultSummary = resultSummary,
+            PymeId = pyme.Id,
+            RiskLevel = geminiResponse.RiskLevel,
+            ResultSummary = geminiResponse.Summary,
+            Flags = geminiResponse.Flags.ToList(),
+            RequiresManualReview = geminiResponse.RequiresManualReview,
             CreatedAt = DateTime.UtcNow
         };
 
