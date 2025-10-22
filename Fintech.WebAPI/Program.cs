@@ -1,5 +1,6 @@
 using DotNetEnv.Configuration;
 using Fintech.Application.Interfaces;
+using Fintech.Application.Interfaces.CreditApplication;
 using Fintech.Application.Services;
 using Fintech.Domain.Interfaces;
 using Fintech.Infrastructure.MappingProfiles;
@@ -42,7 +43,7 @@ builder.Services.AddSingleton(provider => new Client(url, key, options));
 builder.Services.ConfigureServices();
 
 // Add AutoMapper to the container.
-builder.Services.AddAutoMapper(cfg => { }, typeof(UserProfile), typeof(PymeProfile));
+builder.Services.AddAutoMapper(cfg => { }, typeof(UserProfile), typeof(PymeProfile), typeof(CreditFormProfile));
 
 // Add repositories to the container.
 builder.Services.AddScoped<IUserRepository, UserRepository>();
@@ -54,6 +55,10 @@ builder.Services.AddScoped<IAuthService, AuthService>();
 // registrar PymeService y PymeRepository
 builder.Services.AddScoped<IPymeService, PymeService>();
 builder.Services.AddScoped<IPymeRepository, PymeRepository>();
+
+// registrar CreditFormService y CreditFormRepository
+builder.Services.AddScoped<ICreditFormService, CreditFormService>();
+builder.Services.AddScoped<ICreditFormRepository, CreditFormRepository>();
 
 // Add controllers to the container.
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
