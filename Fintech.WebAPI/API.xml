@@ -4,6 +4,26 @@
         <name>Fintech.WebAPI</name>
     </assembly>
     <members>
+        <member name="M:Fintech.WebAPI.Controllers.AmlController.CheckAmlAsync(Fintech.Application.DTOs.Aml.AmlRequestDto)">
+            <summary>
+            Realiza una verificación AML para un usuario.
+            </summary>
+            <param name="amlRequest">Datos de la solicitud AML.</param>
+            <returns>Resultado de la verificación AML.</returns>
+        </member>
+        <member name="M:Fintech.WebAPI.Controllers.AmlController.GetMyChecksAsync">
+            <summary>
+            Obtiene todas las verificaciones AML para el usuario autenticado.
+            </summary>
+            <returns>Una lista de resultados de verificaciones AML.</returns>
+        </member>
+        <member name="M:Fintech.WebAPI.Controllers.AmlController.GetByIdAsync(System.Guid)">
+            <summary>
+            Obtiene una verificación AML por su ID.
+            </summary>
+            <param name="id">ID de la verificación AML.</param>
+            <returns>Resultado de la verificación AML.</returns>
+        </member>
         <member name="M:Fintech.WebAPI.Controllers.AuthController.RegisterAsync(Fintech.Application.DTOs.RegisterUserDto)">
             <summary>
             Registrar un nuevo usuario.
@@ -97,6 +117,20 @@
             </summary>
             <param name="id">ID de la Pyme a eliminar.</param>
             <returns>Respuesta sin contenido.</returns>
+        </member>
+        <member name="M:Fintech.WebAPI.Controllers.SignatureController.SignAgreement(Fintech.Application.DTOs.Signature.SignAgreementRequest)">
+            <summary>
+            Firma la aceptación del crédito.
+            </summary>
+            <param name="request">Información a firmar</param>
+            <returns>Resultado de la firma</returns>
+        </member>
+        <member name="M:Fintech.WebAPI.Controllers.SignatureController.VerifySignature(Fintech.Application.DTOs.VerifySignatureRequest)">
+            <summary>
+            Validación de la firma del crédito.
+            </summary>
+            <param name="request">Información a validar</param>
+            <returns>Resultado de la validación de firma</returns>
         </member>
         <member name="M:Fintech.WebAPI.Controllers.TextRecognitionController.ParseImage(Microsoft.AspNetCore.Http.IFormFile)">
             <summary>
