@@ -1,4 +1,5 @@
 ﻿using Fintech.Application.DTOs;
+using Fintech.Application.DTOs.KycValidation;
 using Fintech.Domain.Entities;
 
 namespace Fintech.Application.Interfaces
@@ -10,6 +11,8 @@ namespace Fintech.Application.Interfaces
         Task<Pyme> CreateAsync(PymeRequestDto dto, Guid authId);
         Task<Pyme?> UpdateAsync(Guid authId, UpdatePymeDto dto);
         Task DeleteAsync(Guid authId);
-        Task<bool> VerifyAsync();
+        Task<bool> VerifyAsync(UpdateKycPymeDto updateKycPymeDto);
+        Task<Kyc?> GetByKycAsync(UpdateKycPymeDto updateKycPymeDto);
+        Task<Kyc?> GetByNationalIdNumberAsync(string nationalIdNumber);
     }
 }

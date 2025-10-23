@@ -81,6 +81,15 @@
             <param name="faceSelfie">Archivo de imagen del selfie</param>
             <returns>Resultado de la verificación</returns>
         </member>
+        <member name="M:Fintech.WebAPI.Controllers.KycVerificationController.SearchKyc(System.String,Microsoft.AspNetCore.Http.IFormFile,Microsoft.AspNetCore.Http.IFormFile)">
+            <summary>
+            Búsqueda de documento y selfie
+            </summary>
+            <param name="nationalIdNumber">Número de identificación nacional</param>
+            <param name="idDocumentFront">Archivo de imagen del documento</param>
+            <param name="faceSelfie">Archivo de imagen del selfie</param>
+            <returns>Resultado de la búsqueda</returns>
+        </member>
         <member name="M:Fintech.WebAPI.Controllers.PymesController.GetById(System.Guid)">
             <summary>
             Obtiene una Pyme por su ID.

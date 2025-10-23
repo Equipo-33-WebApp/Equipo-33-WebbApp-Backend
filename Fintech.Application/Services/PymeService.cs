@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Fintech.Application.DTOs;
+using Fintech.Application.DTOs.KycValidation;
 using Fintech.Application.Interfaces;
 using Fintech.Domain.Entities;
 
@@ -61,9 +62,21 @@ namespace Fintech.Application.Services
             await _pymeRepository.DeleteAsync(authId);
         }
 
-        public async Task<bool> VerifyAsync()
+        public async Task<bool> VerifyAsync(UpdateKycPymeDto updateKycPymeDto)
         {
-            return await _pymeRepository.VerifyAsync();
+            var kycPyme = _mapper.Map<Kyc>(updateKycPymeDto);
+            return await _pymeRepository.VerifyAsync(kycPyme);
+        }
+
+        public async Task<Kyc?> GetByKycAsync(UpdateKycPymeDto updateKycPymeDto)
+        {
+            var kycPyme = _mapper.Map<Kyc>(updateKycPymeDto);
+            return await _pymeRepository.GetByKycAsync(kycPyme);
+        }
+
+        public async Task<Kyc?> GetByNationalIdNumberAsync(string nationalIdNumber)
+        {
+            return await _pymeRepository.GetByNationalIdNumberAsync(nationalIdNumber);
         }
     }
 }

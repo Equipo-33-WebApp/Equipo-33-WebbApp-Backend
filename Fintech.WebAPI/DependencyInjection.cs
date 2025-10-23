@@ -41,6 +41,7 @@ public static class DependencyInjection
         services.AddScoped<ITextRecognitionService, OcrSpaceService>();
         services.AddScoped<IKycVerificationService, KycVerificationService>();
 
+        services.AddAutoMapper(cfg => { }, typeof(KycProfile));
 
         return services;
     }

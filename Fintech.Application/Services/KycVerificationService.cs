@@ -1,5 +1,7 @@
 using Fintech.Application.DTOs.KycValidation;
 using Fintech.Application.Interfaces;
+using System.Security.Cryptography;
+using System.Text;
 using System.Text.RegularExpressions;
 
 namespace Fintech.Application.Services;
@@ -9,6 +11,17 @@ public class KycVerificationService(IFacialRecognitionService _deepFaceService, 
     public async Task<KycVerificationResultDto> VerifyDocumentAndSelfieAndExtractData(
         KycVerificationRequestDto request)
     {
+        var doesExistPymeByNationalIdNumber = await _pymeService.GetByNationalIdNumberAsync(request.NationalIdNumber);
+        if(doesExistPymeByNationalIdNumber != null)
+        {
+            return new KycVerificationResultDto
+            {
+                Verified = false,
+                Percentage = $"-",
+                Observation = "El documento ya se encuentra registrado.",
+            };
+        }
+
         var verificationResult = await PerformDeepFaceVerificationAsync(
             _deepFaceService,
             request
@@ -44,12 +57,34 @@ public class KycVerificationService(IFacialRecognitionService _deepFaceService, 
 
         if (validationResult.Verified && verified)
         {
-            var result = await _pymeService.VerifyAsync();
+            var result = await ProcessKycUpdateAsync(request, _pymeService);
             if(!result) validationResult.Observation = "Error al actualizar los registros.";
-            validationResult.Observation = "La validación fue exitosa: Identificación nacional y selfie verificados.";
+            else validationResult.Observation = "La validación fue exitosa: Identificación nacional y selfie verificados.";
         }
 
         return validationResult;
+    }
+
+    private static async Task<bool> ProcessKycUpdateAsync(KycVerificationRequestDto request, IPymeService pymeService)
+    {
+        request.IdDocumentFront.Seek(0, SeekOrigin.Begin);
+        using var streamDoc = new MemoryStream();
+        await request.IdDocumentFront.CopyToAsync(streamDoc);
+        streamDoc.Seek(0, SeekOrigin.Begin);
+
+        request.FaceSelfie.Seek(0, SeekOrigin.Begin);
+        using var streamSelfie = new MemoryStream();
+        await request.FaceSelfie.CopyToAsync(streamSelfie);
+        streamSelfie.Seek(0, SeekOrigin.Begin);
+        var updateKycPymeDto = new UpdateKycPymeDto()
+        {
+            HasKycValidated = true,
+            NationalIdNumber = request.NationalIdNumber,
+            DocumentFrontHash = await HashHelper.ComputeSha256Async(streamDoc),
+            FaceSelfieHash = await HashHelper.ComputeSha256Async(streamSelfie),
+        };
+        var result = await pymeService.VerifyAsync(updateKycPymeDto);
+        return result;
     }
 
     private static float CalculateVerificationPercentage(VerifiedDocumentFaceDto verificationResult)
@@ -165,5 +200,41 @@ public class KycVerificationService(IFacialRecognitionService _deepFaceService, 
             Percentage = $"{currentPercentage:F0}%",
             Observation = observationMessage
         };
+    }
+
+    public async Task<bool> GetKycInfo(KycVerificationRequestDto request)
+    {
+        var updateKycPymeDto = new UpdateKycPymeDto()
+        {
+            NationalIdNumber = request.NationalIdNumber,
+            DocumentFrontHash = await HashHelper.ComputeSha256Async(request.IdDocumentFront),
+            FaceSelfieHash = await HashHelper.ComputeSha256Async(request.FaceSelfie),
+        };
+        var result = await _pymeService.GetByKycAsync(updateKycPymeDto);
+        return result != null;
+    }
+}
+
+public static class HashHelper
+{
+    public static string ComputeSha256(string input)
+    {
+        if (string.IsNullOrEmpty(input))
+            return string.Empty;
+
+        using var sha256 = SHA256.Create();
+        byte[] bytes = Encoding.UTF8.GetBytes(input);
+        byte[] hash = sha256.ComputeHash(bytes);
+        return Convert.ToHexString(hash).ToLowerInvariant();
+    }
+
+    public static async Task<string> ComputeSha256Async(Stream stream)
+    {
+        if (stream == null || stream.Length == 0)
+            return string.Empty;
+
+        using var sha256 = SHA256.Create();
+        byte[] hash = await sha256.ComputeHashAsync(stream);
+        return Convert.ToHexString(hash).ToLowerInvariant();
     }
 }
