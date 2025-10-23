@@ -20,10 +20,16 @@
         </member>
         <member name="M:Fintech.WebAPI.Controllers.CreditFormController.GetById(System.Guid)">
             <summary>
-            Obtiene una CreditForm por su ID.
+            Obtiene un CreditForm por su ID.
             </summary>
-            <param name="id">ID de la Pyme a obtener.</param>
-            <returns>Información de la Pyme.</returns>
+            <param name="id">ID del CreditForm a obtener.</param>
+            <returns>Información de CreditForm junto a sus documentos.</returns>
+        </member>
+        <member name="M:Fintech.WebAPI.Controllers.CreditFormController.CreateCreditForm(Fintech.Application.DTOs.CreateCreditFormDto)">
+            <summary>
+            Crea un CreditForm.
+            </summary>
+            <returns>Statuts created</returns>
         </member>
         <member name="M:Fintech.WebAPI.Controllers.FacialRecognitionController.Verify(Microsoft.AspNetCore.Http.IFormFile,Microsoft.AspNetCore.Http.IFormFile,System.String,System.String)">
             <summary>

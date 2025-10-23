@@ -3,6 +3,7 @@ using Fintech.Application.Interfaces;
 using Fintech.Application.Interfaces.CreditApplication;
 using Fintech.Application.Services;
 using Fintech.Domain.Interfaces;
+using Fintech.Infrastructure.Factories;
 using Fintech.Infrastructure.MappingProfiles;
 using Fintech.Infrastructure.Repositories;
 using Fintech.WebAPI;
@@ -39,6 +40,8 @@ var options = new SupabaseOptions
     AutoConnectRealtime = true,
 };
 builder.Services.AddSingleton(provider => new Client(url, key, options));
+// Add SupabaseClientFactory to the container.
+builder.Services.AddScoped<SupabaseClientFactory>();
 
 builder.Services.ConfigureServices();
 
