@@ -4,17 +4,8 @@ using System.Text.RegularExpressions;
 
 namespace Fintech.Application.Services;
 
-public class KycVerificationService : IKycVerificationService
+public class KycVerificationService(IFacialRecognitionService _deepFaceService, ITextRecognitionService _ocrSpaceService, IPymeService _pymeService) : IKycVerificationService
 {
-    private readonly IFacialRecognitionService _deepFaceService;
-    private readonly ITextRecognitionService _ocrSpaceService;
-
-    public KycVerificationService(IFacialRecognitionService deepFaceService, ITextRecognitionService ocrSpaceService)
-    {
-        _deepFaceService = deepFaceService;
-        _ocrSpaceService = ocrSpaceService;
-    }
-
     public async Task<KycVerificationResultDto> VerifyDocumentAndSelfieAndExtractData(
         KycVerificationRequestDto request)
     {
@@ -53,6 +44,8 @@ public class KycVerificationService : IKycVerificationService
 
         if (validationResult.Verified && verified)
         {
+            var result = await _pymeService.VerifyAsync();
+            if(!result) validationResult.Observation = "Error al actualizar los registros.";
             validationResult.Observation = "La validación fue exitosa: Identificación nacional y selfie verificados.";
         }
 
