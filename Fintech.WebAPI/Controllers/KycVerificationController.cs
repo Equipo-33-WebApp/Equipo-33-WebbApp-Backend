@@ -59,4 +59,49 @@ public class KycVerificationController : ControllerBase
 
         return Ok(result);
     }
+
+
+
+    /// <summary>
+    /// Búsqueda de documento y selfie
+    /// </summary>
+    /// <param name="nationalIdNumber">Número de identificación nacional</param>
+    /// <param name="idDocumentFront">Archivo de imagen del documento</param>
+    /// <param name="faceSelfie">Archivo de imagen del selfie</param>
+    /// <returns>Resultado de la búsqueda</returns>
+    [HttpPost("search_kyc")]
+    [ProducesResponseType(typeof(KycVerificationResultDto), StatusCodes.Status200OK)]
+    public async Task<IActionResult> SearchKyc(
+        [FromForm] string nationalIdNumber,
+        IFormFile idDocumentFront,
+        IFormFile faceSelfie)
+    {
+        if (string.IsNullOrEmpty(nationalIdNumber) || idDocumentFront == null || faceSelfie == null)
+        {
+            return BadRequest("NationalIdNumber, IdDocumentFront, and FaceSelfie are required.");
+        }
+
+        using var idDocumentMemoryStream = new MemoryStream();
+        await idDocumentFront.CopyToAsync(idDocumentMemoryStream);
+        idDocumentMemoryStream.Position = 0;
+
+        using var faceSelfieMemoryStream = new MemoryStream();
+        await faceSelfie.CopyToAsync(faceSelfieMemoryStream);
+        faceSelfieMemoryStream.Position = 0;
+
+        var requestDto = new KycVerificationRequestDto
+        {
+            NationalIdNumber = nationalIdNumber,
+            IdDocumentFront = idDocumentMemoryStream,
+            IdDocumentFrontName = idDocumentFront.FileName,
+            IdDocumentFrontContentType = idDocumentFront.ContentType,
+            FaceSelfie = faceSelfieMemoryStream,
+            FaceSelfieName = faceSelfie.FileName,
+            FaceSelfieContentType = faceSelfie.ContentType
+        };
+
+        var result = await _documentVerificationService.GetKycInfo(requestDto);
+
+        return Ok(result);
+    }
 }

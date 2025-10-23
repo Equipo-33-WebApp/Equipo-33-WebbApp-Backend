@@ -9,5 +9,5 @@ public class Pyme : Entity
     public int Employees { get; set; }        
     public string Phone { get; set; } = string.Empty;
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
-    public string HasKycValidated { get; set; } = string.Empty;
+    public bool HasKycValidated { get; set; }
 }

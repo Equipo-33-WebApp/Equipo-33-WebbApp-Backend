@@ -6,4 +6,5 @@ public interface IKycVerificationService
 {
     Task<KycVerificationResultDto> VerifyDocumentAndSelfieAndExtractData(
         KycVerificationRequestDto request);
+    Task<bool> GetKycInfo(KycVerificationRequestDto request);
 }
