@@ -4,6 +4,25 @@
         <name>Fintech.WebAPI</name>
     </assembly>
     <members>
+        <member name="M:Fintech.WebAPI.Controllers.AmlController.CheckAmlAsync">
+            <summary>
+            Realiza una verificación AML para un usuario.
+            </summary>
+            <returns>Resultado de la verificación AML.</returns>
+        </member>
+        <member name="M:Fintech.WebAPI.Controllers.AmlController.GetMyChecksAsync">
+            <summary>
+            Obtiene todas las verificaciones AML para el usuario autenticado.
+            </summary>
+            <returns>Una lista de resultados de verificaciones AML.</returns>
+        </member>
+        <member name="M:Fintech.WebAPI.Controllers.AmlController.GetByIdAsync(System.Guid)">
+            <summary>
+            Obtiene una verificación AML por su ID.
+            </summary>
+            <param name="id">ID de la verificación AML.</param>
+            <returns>Resultado de la verificación AML.</returns>
+        </member>
         <member name="M:Fintech.WebAPI.Controllers.AuthController.RegisterAsync(Fintech.Application.DTOs.RegisterUserDto)">
             <summary>
             Registrar un nuevo usuario.

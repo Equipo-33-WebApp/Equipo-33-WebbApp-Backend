@@ -1,9 +1,11 @@
 using DotNetEnv.Configuration;
 using Fintech.Application.Interfaces;
+using Fintech.Application.Interfaces.Aml;
 using Fintech.Application.Services;
 using Fintech.Domain.Interfaces;
 using Fintech.Infrastructure.MappingProfiles;
 using Fintech.Infrastructure.Repositories;
+using Fintech.Infrastructure.Service;
 using Fintech.WebAPI;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
@@ -37,23 +39,38 @@ var options = new SupabaseOptions
     AutoRefreshToken = true,
     AutoConnectRealtime = true,
 };
+
+// Add Supabase client to the container.
 builder.Services.AddSingleton(provider => new Client(url, key, options));
+
+// Add GeminiAmlService to the container.
+var geminiApiKey = builder.Configuration["GEMINI_API_KEY"];
+
+if (string.IsNullOrWhiteSpace(geminiApiKey))
+    throw new Exception("Falta la variable de entorno GEMINI_API_KEY");
+
+builder.Services.AddSingleton<IGeminiAmlService>(provider =>
+{
+    var apiKey = provider.GetRequiredService<IConfiguration>()["GEMINI_API_KEY"];
+    return new GeminiAmlService(apiKey!);
+});
+
 
 builder.Services.ConfigureServices();
 
 // Add AutoMapper to the container.
-builder.Services.AddAutoMapper(cfg => { }, typeof(UserProfile), typeof(PymeProfile));
+builder.Services.AddAutoMapper(cfg => { }, typeof(UserProfile), typeof(PymeProfile), typeof(AmlProfile));
 
 // Add repositories to the container.
 builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IAmlRepository, AmlRepository>();
+builder.Services.AddScoped<IPymeRepository, PymeRepository>();
 
 // Add services to the container.
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
-
-// registrar PymeService y PymeRepository
+builder.Services.AddScoped<IAmlService, AmlService>();
 builder.Services.AddScoped<IPymeService, PymeService>();
-builder.Services.AddScoped<IPymeRepository, PymeRepository>();
 
 // Add controllers to the container.
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
