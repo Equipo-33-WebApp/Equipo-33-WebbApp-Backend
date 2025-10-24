@@ -27,9 +27,10 @@
         </member>
         <member name="M:Fintech.WebAPI.Controllers.CreditFormController.CreateCreditForm(Fintech.Application.DTOs.CreateCreditFormDto)">
             <summary>
-            Crea un CreditForm.
+            Crea una nueva solicitud de Credito.
             </summary>
-            <returns>Statuts created</returns>
+            <param name="dto">El DTO del form a crear  a crear.</param>
+            <returns>La Pyme creada.</returns>
         </member>
         <member name="M:Fintech.WebAPI.Controllers.FacialRecognitionController.Verify(Microsoft.AspNetCore.Http.IFormFile,Microsoft.AspNetCore.Http.IFormFile,System.String,System.String)">
             <summary>

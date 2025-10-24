@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using Fintech.Application.DTOs;
+using Fintech.Application.Interfaces;
 using Fintech.Application.Interfaces.CreditApplication;
 using Fintech.Domain.Entities;
 using System;
@@ -21,6 +23,29 @@ namespace Fintech.Application.Services
         public async Task<CreditForm?> GetByIdAsync(Guid id)
         {
             return await _creditFormRepository.GetByIdAsync(id);
+        }
+        public async Task<CreditForm?> GetByAuthIdAsync(Guid authId)
+        {
+            return await _creditFormRepository.GetByAuthIdAsync(authId);
+        }
+        public async Task<CreditForm> CreateAsync(CreateCreditFormDto dto, Guid authId)
+        {
+            var creditForm = new CreditForm
+            {
+                Id = Guid.NewGuid(),
+                UserId = authId,
+                PymeId = dto.PymeId,
+                Amount = dto.Amount,
+                Purpose = dto.Purpose,
+                Status = "pendiente",
+                CreatedAt = DateTime.UtcNow,
+            };
+
+            return await _creditFormRepository.AddAsync(creditForm);
+        }
+        public async Task<CreditForm?> UpdateAsync(UpdatePymeDto dto, Guid authId)
+        {
+            throw new NotImplementedException();
         }
     }
 }

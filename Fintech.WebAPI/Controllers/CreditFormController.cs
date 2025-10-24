@@ -1,6 +1,8 @@
 ﻿using Fintech.Application.DTOs;
+using Fintech.Application.Interfaces.CreditApplication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace Fintech.WebAPI.Controllers
 {
@@ -9,6 +11,11 @@ namespace Fintech.WebAPI.Controllers
     [ApiController]
     public class CreditFormController : ControllerBase
     {
+        private readonly ICreditFormService _creditFormService;
+        public CreditFormController(ICreditFormService creditFormService)
+        {
+            _creditFormService = creditFormService;
+        }
 
         /// <summary>
         /// Obtiene un CreditForm por su ID.
@@ -18,17 +25,53 @@ namespace Fintech.WebAPI.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(Guid id)
         {
-            return null!;
-        }
+            try
+            {
+                var pyme = await _creditFormService.GetByIdAsync(id);
+                if (pyme == null)
+                    return NotFound("No se encontre el CreditForm ingresada");
 
+                return Ok(pyme);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new
+                {
+                    error = "Error interno al consultar el CreditForm. Revisa la conexion con supabase y politica RLS",
+                    message = ex.Message,
+                    stackTrace = ex.StackTrace
+                });
+            }
+        }
         /// <summary>
-        /// Crea un CreditForm.
+        /// Crea una nueva solicitud de Credito.
         /// </summary>
-        /// <returns>Statuts created</returns>
+        /// <param name="dto">El DTO del form a crear  a crear.</param>
+        /// <returns>La Pyme creada.</returns>
         [HttpPost]
-        public async Task<IActionResult> CreateCreditForm(CreateCreditFormDto createCreditFormDto)
+        public async Task<IActionResult> CreateCreditForm([FromBody] CreateCreditFormDto dto)
         {
-            return null;
+            var subClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value
+                           ?? User.FindFirst("sub")?.Value;
+            if (string.IsNullOrEmpty(subClaim))
+                return Unauthorized("Revisa si el token es valido");
+
+            if (!Guid.TryParse(subClaim, out var authId))
+                return Unauthorized("El guid no es valido.");
+            try
+            {
+                var createdPyme = await _creditFormService.CreateAsync(dto, authId);
+                return CreatedAtAction(nameof(GetById), new { id = createdPyme.Id }, createdPyme);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new
+                {
+                    error = "Error interno al crear el CreditForm. Puede ser un problema de RLS, llave foranea, o configuracion de Supabase.",
+                    message = ex.Message,
+                    stackTrace = ex.StackTrace
+                });
+            }
         }
     }
 }

@@ -22,5 +22,27 @@ namespace Fintech.Infrastructure.Repositories
 
             return model != null ? _mapper.Map<CreditForm>(model) : null;
         }
+        public async Task<CreditForm?> GetByAuthIdAsync(Guid authId)
+        {
+            var result = await _client.From<CreditFormModel>().Where(x => x.UserId == authId).Get();
+            var model = result.Models.FirstOrDefault();
+            return model != null ? _mapper.Map<CreditForm>(model) : null;
+        }
+        public async Task<CreditForm> AddAsync(CreditForm creditForm)
+        {
+            var model = new CreditFormModel
+            {
+                Id = creditForm.Id,
+                UserId = creditForm.UserId,
+                PymeId = creditForm.PymeId,
+                Amount = creditForm.Amount ?? 0,
+                Purpose = creditForm.Purpose ?? string.Empty,
+                Status = creditForm.Status ?? "pendiente",
+                CreatedAt = DateTime.UtcNow
+            };
+
+            await _client.From<CreditFormModel>().Insert(model);
+            return creditForm;
+        }
     }
 }
