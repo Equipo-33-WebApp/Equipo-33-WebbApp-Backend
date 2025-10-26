@@ -60,7 +60,7 @@ builder.Services.AddSingleton<IGeminiAmlService>(provider =>
 builder.Services.ConfigureServices();
 
 // Add AutoMapper to the container.
-builder.Services.AddAutoMapper(cfg => { }, typeof(UserProfile), typeof(PymeProfile), typeof(CreditFormProfile), typeof(CreditFormProfile));
+builder.Services.AddAutoMapper(cfg => { }, typeof(UserProfile), typeof(PymeProfile), typeof(AmlProfile), typeof(CreditFormProfile));
 
 // Add repositories to the container.
 builder.Services.AddScoped<IUserRepository, UserRepository>();
