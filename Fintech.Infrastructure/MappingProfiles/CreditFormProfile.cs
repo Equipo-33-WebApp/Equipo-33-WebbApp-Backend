@@ -9,6 +9,7 @@ namespace Fintech.Infrastructure.MappingProfiles
         public CreditFormProfile()
         {
             CreateMap<CreditForm, CreditFormModel>().ReverseMap();
+            CreateMap<CreditForm, CreditFormModelCreate>().ReverseMap();
         }
     }
 }

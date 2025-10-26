@@ -1,3 +1,5 @@
+using AutoMapper.Configuration.Annotations;
+using Fintech.Domain.Entities;
 using Supabase.Postgrest.Attributes;
 using Supabase.Postgrest.Models;
 using System.Text.Json.Serialization;
@@ -8,9 +10,9 @@ namespace Fintech.Infrastructure.Persistence.Models;
 /// Modelo para la tabla de solicitud de créditos en Supabase
 /// </summary>
 [Table("credit_forms")]
-public class CreditFormModel : BaseModel
+public class CreditFormModelCreate : BaseModel
 {
-    [PrimaryKey("id", false)]
+    [PrimaryKey("id",false)]
     public Guid Id { get; set; }
 
     [Column("user_id")]
@@ -31,9 +33,5 @@ public class CreditFormModel : BaseModel
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
     [Column("updated_at")]
-    public DateTime UpdatedAt { get; set; }
-
-    [System.ComponentModel.DataAnnotations.Schema.NotMapped]
-    [JsonPropertyName("uploaded_documents")]
-    public List<UploadedDocumentModel> UploadedDocuments { get; set; } = new();
+    public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
 }
