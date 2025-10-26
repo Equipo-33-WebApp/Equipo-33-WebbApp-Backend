@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
-using Fintech.Application.DTOs;
-using Fintech.Application.DTOs.Signature;
+using Fintech.Application.DTOs.DigitalSignature;
 using Fintech.Domain.Entities;
 using Fintech.Infrastructure.Persistence.Models;
 using Fintech.Infrastructure.Utils;

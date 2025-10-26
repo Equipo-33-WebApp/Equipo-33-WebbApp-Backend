@@ -1,4 +1,4 @@
-﻿namespace Fintech.Application.DTOs.Signature;
+﻿namespace Fintech.Application.DTOs.DigitalSignature;
 
 public class SignAgreementRequest
 {

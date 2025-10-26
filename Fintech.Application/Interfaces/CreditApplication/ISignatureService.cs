@@ -1,5 +1,4 @@
-﻿using Fintech.Application.DTOs;
-using Fintech.Application.DTOs.Signature;
+﻿using Fintech.Application.DTOs.DigitalSignature;
 
 namespace Fintech.Application.Interfaces.CreditApplication;
 

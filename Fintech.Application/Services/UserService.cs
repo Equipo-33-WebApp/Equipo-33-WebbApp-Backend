@@ -68,4 +68,9 @@ public class UserService : IUserService
         await _userRepository.DeleteAsync(id);
     }
 
+    public async Task<bool> IsRoleAsync(Roles role)
+    {
+        var user = await _userRepository.GetCurrentUserAsync();
+        return user.Role != role.ToString();
+    }
 }
