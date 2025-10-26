@@ -1,3 +1,4 @@
+using AutoMapper;
 using Supabase.Postgrest.Attributes;
 using Supabase.Postgrest.Models;
 
@@ -13,6 +14,7 @@ public class UploadedDocumentModel : BaseModel
     public Guid Id { get; set; }
 
     [Column("credit_form_id")]
+    [Reference(typeof(CreditFormModel))]
     public Guid CreditFormId { get; set; }
 
     [Column("file_url")]

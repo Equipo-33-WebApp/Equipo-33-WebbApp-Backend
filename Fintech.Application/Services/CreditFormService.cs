@@ -43,9 +43,18 @@ namespace Fintech.Application.Services
 
             return await _creditFormRepository.AddAsync(creditForm);
         }
-        public async Task<CreditForm?> UpdateAsync(UpdatePymeDto dto, Guid authId)
+        public async Task<CreditForm?> UpdateAsync(UpdateCreditFormDto dto, Guid authId)
         {
-            throw new NotImplementedException();
+            var existingCreditForm = await _creditFormRepository.GetByAuthIdAsync(authId);
+            if (existingCreditForm == null)
+            {
+                return null;
+            }
+            //existingCreditForm.PymeId = dto.PymeId;
+            existingCreditForm.Amount = dto.Amount;
+            existingCreditForm.Purpose = dto.Purpose;
+            return await _creditFormRepository.UpdateAsync(existingCreditForm);
+
         }
     }
 }
