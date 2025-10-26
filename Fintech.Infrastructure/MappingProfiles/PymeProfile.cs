@@ -3,6 +3,8 @@ using Fintech.Application.DTOs;
 using Fintech.Domain.Entities;
 using Fintech.Infrastructure.Persistence.Models;
 
+namespace Fintech.Infrastructure.MappingProfiles;
+
 public class PymeProfile : Profile
 {
     public PymeProfile()

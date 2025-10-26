@@ -9,6 +9,8 @@ namespace Fintech.Application.Interfaces
         Task<Pyme> AddAsync(Pyme pyme);
         Task<Pyme> UpdateAsync(Pyme pyme);
         Task DeleteAsync(Guid authId);
-        Task<bool> VerifyAsync();
+        Task<bool> VerifyAsync(Kyc kyc);
+        Task<Kyc?> GetByKycAsync(Kyc kyc);
+        Task<Kyc?> GetByNationalIdNumberAsync(string nationalIdNumber);
     }
 }

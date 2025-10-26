@@ -63,21 +63,43 @@ namespace Fintech.Infrastructure.Repositories
             await _client.From<PymeModel>().Where(x => x.AuthId == authId).Delete();
         }
 
-        public async Task<bool> VerifyAsync()
+        public async Task<bool> VerifyAsync(Kyc kyc)
         {
             var user = _client.Auth.CurrentUser;
             if (user == null || string.IsNullOrEmpty(user.Id))
                 throw new InvalidOperationException("No authenticated user found.");
 
-            var authId = Guid.Parse(user.Id);
+            kyc.AuthId = Guid.Parse(user.Id);
+            
+            var model = _mapper.Map<PymeKycModel>(kyc);
 
-            var response = await _client
-                .From<PymeKycModel>()
-                .Where(x => x.AuthId == authId)
-                .Set(x => x.HasKycValidated, true)
-                .Update();
+            var response = await _client.From<PymeKycModel>().Update(model);
 
             return response.Models.Any();
+        }
+
+        public async Task<Kyc?> GetByKycAsync(Kyc kyc)
+        {
+            var result = await _client
+                .From<PymeKycModel>()
+                .Where(x => x.NationalIdNumber == kyc.NationalIdNumber)
+                .Where(x => x.DocumentFrontHash == kyc.DocumentFrontHash)
+                .Where(x => x.FaceSelfieHash == kyc.FaceSelfieHash)
+                .Get();
+            var model = result.Models.FirstOrDefault();
+
+            return model != null ? _mapper.Map<Kyc>(model) : null;
+        }
+
+        public async Task<Kyc?> GetByNationalIdNumberAsync(string nationalIdNumber)
+        {
+            var result = await _client
+                .From<PymeKycModel>()
+                .Where(x => x.NationalIdNumber == nationalIdNumber)
+                .Get();
+            var model = result.Models.FirstOrDefault();
+
+            return model != null ? _mapper.Map<Kyc>(model) : null;
         }
     }
 }
