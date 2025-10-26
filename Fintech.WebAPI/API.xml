@@ -37,6 +37,20 @@
             <param name="loginUserDto">Email y contraseña del usuario.</param>
             <returns>Mensaje de login exitoso y token de autenticación.</returns>
         </member>
+        <member name="M:Fintech.WebAPI.Controllers.CreditFormController.GetById(System.Guid)">
+            <summary>
+            Obtiene un CreditForm por su ID.
+            </summary>
+            <param name="id">ID del CreditForm a obtener.</param>
+            <returns>Información de CreditForm junto a sus documentos.</returns>
+        </member>
+        <member name="M:Fintech.WebAPI.Controllers.CreditFormController.CreateCreditForm(Fintech.Application.DTOs.CreateCreditFormDto)">
+            <summary>
+            Crea una nueva solicitud de Credito.
+            </summary>
+            <param name="dto">El DTO del form a crear  a crear.</param>
+            <returns>La Pyme creada.</returns>
+        </member>
         <member name="M:Fintech.WebAPI.Controllers.FacialRecognitionController.Verify(Microsoft.AspNetCore.Http.IFormFile,Microsoft.AspNetCore.Http.IFormFile,System.String,System.String)">
             <summary>
             Verifica si dos imágenes son similares.
