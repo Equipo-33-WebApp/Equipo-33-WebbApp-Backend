@@ -104,6 +104,15 @@
             <param name="faceSelfie">Archivo de imagen del selfie</param>
             <returns>Resultado de la búsqueda</returns>
         </member>
+        <member name="M:Fintech.WebAPI.Controllers.PanelController.GetById(System.Int32,System.Int32,System.String)">
+            <summary>
+            Obtiene una lista paginada de solicitudes de crédito con filtro de estado opcional.
+            </summary>
+            <param name="page">Número de página actual (por defecto 1).</param>
+            <param name="pageSize">Tamaño de la página (por defecto 10).</param>
+            <param name="status">Estado opcional para filtrar las solicitudes de crédito.</param>
+            <returns>Una lista paginada de solicitudes de crédito con detalles.</returns>
+        </member>
         <member name="M:Fintech.WebAPI.Controllers.PymesController.GetById(System.Guid)">
             <summary>
             Obtiene una Pyme por su ID.
@@ -140,14 +149,14 @@
             <param name="id">ID de la Pyme a eliminar.</param>
             <returns>Respuesta sin contenido.</returns>
         </member>
-        <member name="M:Fintech.WebAPI.Controllers.SignatureController.SignAgreement(Fintech.Application.DTOs.Signature.SignAgreementRequest)">
+        <member name="M:Fintech.WebAPI.Controllers.SignatureController.SignAgreement(Fintech.Application.DTOs.DigitalSignature.SignAgreementRequest)">
             <summary>
             Firma la aceptación de terminos y condiciones.
             </summary>
             <param name="request">Información a firmar</param>
             <returns>Resultado de la firma</returns>
         </member>
-        <member name="M:Fintech.WebAPI.Controllers.SignatureController.VerifySignature(Fintech.Application.DTOs.VerifyTextSignatureRequest)">
+        <member name="M:Fintech.WebAPI.Controllers.SignatureController.VerifySignature(Fintech.Application.DTOs.DigitalSignature.VerifyTextSignatureRequest)">
             <summary>
             Validación de la firma de terminos y condiciones.
             </summary>
@@ -172,7 +181,7 @@
             <param name="userId">ID del usuario.</param>
             <returns>Resultado de la validación de firma</returns>
         </member>
-        <member name="M:Fintech.WebAPI.Controllers.SignatureController.VerifyHashSignature(Fintech.Application.DTOs.VerifySignatureRequest)">
+        <member name="M:Fintech.WebAPI.Controllers.SignatureController.VerifyHashSignature(Fintech.Application.DTOs.DigitalSignature.VerifySignatureRequest)">
             <summary>
             Validación de la firma.
             </summary>

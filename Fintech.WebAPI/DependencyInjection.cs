@@ -21,7 +21,7 @@ public static class DependencyInjection
         });
         services.ConfigureKycServices();
         services.ConfigureAuditServices();
-
+        services.ConfigurePanelServices();
         return services;
     }
 
@@ -52,6 +52,16 @@ public static class DependencyInjection
         services.AddScoped<ISignatureService, SignatureService>();
 
         services.AddAutoMapper(cfg => { }, typeof(AuditAcceptanceProfile));
+
+        return services;
+    }
+
+    public static IServiceCollection ConfigurePanelServices(this IServiceCollection services)
+    {
+        services.AddScoped<IPanelRepository, PanelRepository>();
+        services.AddScoped<IPanelService, PanelService>();
+
+        services.AddAutoMapper(cfg => { }, typeof(PanelProfile));
 
         return services;
     }

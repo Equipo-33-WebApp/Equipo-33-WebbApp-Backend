@@ -1,4 +1,4 @@
-﻿namespace Fintech.Application.DTOs;
+﻿namespace Fintech.Application.DTOs.DigitalSignature;
 
 public class VerifyTextSignatureRequest
 {

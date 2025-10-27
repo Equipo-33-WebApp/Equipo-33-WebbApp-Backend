@@ -1,5 +1,4 @@
-﻿using Fintech.Application.DTOs;
-using Fintech.Application.DTOs.Signature;
+﻿using Fintech.Application.DTOs.DigitalSignature;
 using Fintech.Application.Interfaces.CreditApplication;
 using Fintech.Infrastructure.Utils;
 using Microsoft.AspNetCore.Authorization;

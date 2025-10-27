@@ -37,6 +37,12 @@ public class UserRepository : IUserRepository
         return model != null ? _mapper.Map<User>(model) : null;
     }
 
+    public async Task<User?> GetCurrentUserAsync()
+    {
+        var user = _supabase.Auth.CurrentUser;
+        return await GetByAuthIdAsync(Guid.Parse(user.Id));
+    }
+
     public async Task<IEnumerable<User>> GetAllAsync()
     {
         var result = await _supabase.From<UserModel>().Get();
@@ -65,5 +71,5 @@ public class UserRepository : IUserRepository
             .Delete();
     }
 
-
+    
 }
