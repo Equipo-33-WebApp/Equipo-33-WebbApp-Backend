@@ -31,6 +31,7 @@ var corsOrigins = origins.Split(',');
 var url = builder.Configuration["SUPABASE_URL"];
 var key = builder.Configuration["SUPABASE_KEY"];
 var secret = builder.Configuration["SUPABASE_JWT_SECRET"];
+var serviceRoleKey = builder.Configuration["SUPABASE_SERVICE_ROLE_KEY"];
 
 if (string.IsNullOrWhiteSpace(url) || string.IsNullOrWhiteSpace(key) || string.IsNullOrWhiteSpace(secret))
     throw new Exception("Faltan las variables de entorno SUPABASE_URL, SUPABASE_KEY o SUPABASE_JWT_SECRET");
@@ -39,6 +40,10 @@ var options = new SupabaseOptions
 {
     AutoRefreshToken = true,
     AutoConnectRealtime = true,
+    Headers = new Dictionary<string, string>
+    {
+        { "Authorization", $"Bearer {serviceRoleKey}" }
+    }
 };
 
 // Add Supabase client to the container.

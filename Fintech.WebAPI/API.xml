@@ -193,6 +193,13 @@
             <param name="file">Archivo de imagen</param>
             <returns>Texto extraído de la imagen</returns>
         </member>
+        <member name="M:Fintech.WebAPI.Controllers.UploadedDocumentController.UploadFile(Fintech.WebAPI.Controllers.DocumentAddRequest)">
+            <summary>
+            Sube un archivo al servidor.
+            </summary>
+            <param name="request">El archivo a subir menor a 2mb</param>
+            <returns>Archivo subido.</returns>
+        </member>
         <member name="M:Fintech.WebAPI.Controllers.UserController.GetByIdAsync(System.Guid)">
             <summary>
             Obtener un usuario por su ID.
