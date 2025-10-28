@@ -1,7 +1,8 @@
 using DotNetEnv.Configuration;
 using Fintech.Application.Interfaces;
-using Fintech.Application.Interfaces.CreditApplication;
 using Fintech.Application.Interfaces.Aml;
+using Fintech.Application.Interfaces.CreditApplication;
+using Fintech.Application.Interfaces.UploadedDocuments;
 using Fintech.Application.Services;
 using Fintech.Domain.Interfaces;
 using Fintech.Infrastructure.MappingProfiles;
@@ -71,12 +72,15 @@ builder.Services.AddAutoMapper(cfg => { }, typeof(UserProfile), typeof(PymeProfi
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IAmlRepository, AmlRepository>();
 builder.Services.AddScoped<IPymeRepository, PymeRepository>();
+builder.Services.AddScoped<IUploadedDocumentRepository, UploadedDocumentRepository>();
 
 // Add services to the container.
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IAmlService, AmlService>();
 builder.Services.AddScoped<IPymeService, PymeService>();
+builder.Services.AddScoped<IStorageDocumentService, StorageDocumentService>();
+builder.Services.AddScoped<IUploadedDocumentService, UploadedDocumentService>();
 
 // registrar CreditFormService y CreditFormRepository
 builder.Services.AddScoped<ICreditFormService, CreditFormService>();

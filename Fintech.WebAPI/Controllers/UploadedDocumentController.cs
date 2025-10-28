@@ -1,4 +1,7 @@
-﻿using Fintech.Infrastructure.Persistence.Models;
+﻿using Fintech.Application.Interfaces;
+using Fintech.Application.Interfaces.CreditApplication;
+using Fintech.Application.Interfaces.UploadedDocuments;
+using Fintech.Infrastructure.Persistence.Models;
 using Microsoft.AspNetCore.Mvc;
 using Supabase;
 using System.ComponentModel.DataAnnotations;
@@ -9,10 +12,20 @@ namespace Fintech.WebAPI.Controllers
     [ApiController]
     public class UploadedDocumentController : ControllerBase
     {
-        private readonly Client _storage;
-        public UploadedDocumentController(Client client)
+        private readonly Client _supabaseClient;
+        private readonly IStorageDocumentService _storageDocumentService;
+        private readonly ICreditFormService _creditFormService;
+        private readonly IUploadedDocumentService _uploadedDocumentService;
+        public UploadedDocumentController(
+            Client supabaseClient,
+            IStorageDocumentService storageDocumentService,
+            ICreditFormService creditFormService,
+            IUploadedDocumentService uploadedDocumentService)
         {
-            _storage = client;
+            _supabaseClient = supabaseClient;
+            _storageDocumentService = storageDocumentService;
+            _creditFormService = creditFormService;
+            _uploadedDocumentService = uploadedDocumentService;
         }
         /// <summary>
         /// Sube un archivo annualFinancials al servidor.
@@ -33,54 +46,32 @@ namespace Fintech.WebAPI.Controllers
             if (request.File.Length > 2 * 1024 * 1024)
                 return BadRequest("El archivo excede el tamaño máximo permitido (2 MB).");
 
-            var bucket = _storage.Storage.From("credit-documents");
+            //validar si el id del credit form existe
+            var creditForm = await _creditFormService.GetByIdAsync(creditFormId);
+            if (creditForm == null)
+                return NotFound("El credit form especificado no existe.");
+
+            var bucketName = "credit-documents";
+            var bucket = _supabaseClient.Storage.From(bucketName);
 
             var folderPath = $"{creditFormId}/annualFinancials/";
             var fileName = Path.GetFileName(request.File.FileName).Replace(" ", "_");
             var filePath = folderPath + fileName;
 
+            using var ms = new MemoryStream();
+            await request.File.CopyToAsync(ms);
+            var fileBytes = ms.ToArray();
+
             try
             {
                 // 1. Eliminar archivos existentes en la carpeta (para mantener solo 1)
-                var existingFiles = await bucket.List(folderPath);
-                if (existingFiles != null && existingFiles.Count > 0)
-                {
-                    var deletePaths = existingFiles.Select(f => folderPath + f.Name)
-                        .ToList();
-                    await bucket.Remove(deletePaths);
-                }
+                await _storageDocumentService.DeleteFilesInDirectoryAsync(bucketName, folderPath);
                 //2. Eliminar registros existentes en la tabla UploadedDocuments
-                var model = _storage.From<UploadedDocumentModel>();
-                var existingRecord = await model
-                    .Where(x => x.CreditFormId == creditFormId && x.FileUrl.Contains($"/{creditFormId}/annualFinancials/"))
-                    .Get();
-                if (existingRecord.Models.Count > 0)
-                {
-                    foreach (var record in existingRecord.Models)
-                    {
-                        await model.Delete(record);
-                    }
-                }
-
+                await _uploadedDocumentService.DeleteUploadedDocumentRecordsAsync(creditFormId, folderPath);
                 // 3. Subir el nuevo archivo
-                using var ms = new MemoryStream();
-                await request.File.CopyToAsync(ms);
-                var fileBytes = ms.ToArray();
-
-                var options = new Supabase.Storage.FileOptions { Upsert = true };
-                await bucket.Upload(fileBytes, filePath, options);
-
-                var url = bucket.GetPublicUrl(filePath);
-
+                var url = await _storageDocumentService.UploadFileAsync(bucketName, filePath, fileBytes);
                 // 4. Insertar registro en la tabla UploadedDocuments
-                var model2 = _storage.From<UploadedDocumentModel>();
-                var newDocument = new UploadedDocumentModel
-                {
-                    CreditFormId = creditFormId,
-                    FileUrl = url
-                };
-
-                await model2.Insert(newDocument);
+                await _uploadedDocumentService.AddAsync(creditFormId, url);
 
                 return Ok(new
                 {
@@ -97,8 +88,8 @@ namespace Fintech.WebAPI.Controllers
                     Error = ex.Message
                 });
             }
-
         }
+
         /// <summary>
         /// Sube un archivo taxReturn al servidor.
         /// </summary>
@@ -118,54 +109,32 @@ namespace Fintech.WebAPI.Controllers
             if (request.File.Length > 2 * 1024 * 1024)
                 return BadRequest("El archivo excede el tamaño máximo permitido (2 MB).");
 
-            var bucket = _storage.Storage.From("credit-documents");
+            //validar si el id del credit form existe
+            var creditForm = await _creditFormService.GetByIdAsync(creditFormId);
+            if (creditForm == null)
+                return NotFound("El credit form especificado no existe.");
 
-            var folderPath = $"{creditFormId}/annualFinancials/";
+            var bucketName = "credit-documents";
+            var bucket = _supabaseClient.Storage.From(bucketName);
+
+            var folderPath = $"{creditFormId}/taxReturn/";
             var fileName = Path.GetFileName(request.File.FileName).Replace(" ", "_");
             var filePath = folderPath + fileName;
+
+            using var ms = new MemoryStream();
+            await request.File.CopyToAsync(ms);
+            var fileBytes = ms.ToArray();
 
             try
             {
                 // 1. Eliminar archivos existentes en la carpeta (para mantener solo 1)
-                var existingFiles = await bucket.List(folderPath);
-                if (existingFiles != null && existingFiles.Count > 0)
-                {
-                    var deletePaths = existingFiles.Select(f => folderPath + f.Name)
-                        .ToList();
-                    await bucket.Remove(deletePaths);
-                }
+                await _storageDocumentService.DeleteFilesInDirectoryAsync(bucketName, folderPath);
                 //2. Eliminar registros existentes en la tabla UploadedDocuments
-                var model = _storage.From<UploadedDocumentModel>();
-                var existingRecord = await model
-                    .Where(x => x.CreditFormId == creditFormId && x.FileUrl.Contains($"/{creditFormId}/annualFinancials/"))
-                    .Get();
-                if (existingRecord.Models.Count > 0)
-                {
-                    foreach (var record in existingRecord.Models)
-                    {
-                        await model.Delete(record);
-                    }
-                }
-
+                await _uploadedDocumentService.DeleteUploadedDocumentRecordsAsync(creditFormId, folderPath);
                 // 3. Subir el nuevo archivo
-                using var ms = new MemoryStream();
-                await request.File.CopyToAsync(ms);
-                var fileBytes = ms.ToArray();
-
-                var options = new Supabase.Storage.FileOptions { Upsert = true };
-                await bucket.Upload(fileBytes, filePath, options);
-
-                var url = bucket.GetPublicUrl(filePath);
-
+                var url = await _storageDocumentService.UploadFileAsync(bucketName, filePath, fileBytes);
                 // 4. Insertar registro en la tabla UploadedDocuments
-                var model2 = _storage.From<UploadedDocumentModel>();
-                var newDocument = new UploadedDocumentModel
-                {
-                    CreditFormId = creditFormId,
-                    FileUrl = url
-                };
-
-                await model2.Insert(newDocument);
+                await _uploadedDocumentService.AddAsync(creditFormId, url);
 
                 return Ok(new
                 {
@@ -182,7 +151,6 @@ namespace Fintech.WebAPI.Controllers
                     Error = ex.Message
                 });
             }
-
         }
     }
 
