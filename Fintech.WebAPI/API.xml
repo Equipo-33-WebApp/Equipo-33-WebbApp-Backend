@@ -51,6 +51,13 @@
             <param name="dto">El DTO del form a crear  a crear.</param>
             <returns>La Pyme creada.</returns>
         </member>
+        <member name="M:Fintech.WebAPI.Controllers.CreditFormController.UpdateCreditForm(Fintech.Application.DTOs.UpdateCreditFormDto)">
+            <summary>
+            Actualiza la solicitud de Credito.
+            </summary>
+            <param name="dto">El DTO del form a actualizar .</param>
+            <returns>La Solicitud de credito fue creada.</returns>
+        </member>
         <member name="M:Fintech.WebAPI.Controllers.FacialRecognitionController.Verify(Microsoft.AspNetCore.Http.IFormFile,Microsoft.AspNetCore.Http.IFormFile,System.String,System.String)">
             <summary>
             Verifica si dos imágenes son similares.
@@ -194,6 +201,28 @@
             </summary>
             <param name="file">Archivo de imagen</param>
             <returns>Texto extraído de la imagen</returns>
+        </member>
+        <member name="M:Fintech.WebAPI.Controllers.UploadedDocumentController.UploadAnnualFinancials(System.Guid,Fintech.WebAPI.Controllers.DocumentAddRequestDto)">
+            <summary>
+            Sube un archivo annualFinancials al servidor.
+            </summary>
+            <param name="creditFormId">ID del credit form asociado (se pasa en la URL).</param>
+            /// <param name="request">
+            Form-data con el archivo (campo "File")
+            El tamaño máximo permitido es 2 MB.
+            </param>
+            <returns>Archivo subido correctamente o error correspondiente.</returns>
+        </member>
+        <member name="M:Fintech.WebAPI.Controllers.UploadedDocumentController.UploadTaxReturn(System.Guid,Fintech.WebAPI.Controllers.DocumentAddRequestDto)">
+            <summary>
+            Sube un archivo taxReturn al servidor.
+            </summary>
+            <param name="creditFormId">ID del credit form asociado (se pasa en la URL).</param>
+            /// <param name="request">
+            Form-data con el archivo (campo "File")
+            El tamaño máximo permitido es 2 MB.
+            </param>
+            <returns>Archivo subido correctamente o error correspondiente.</returns>
         </member>
         <member name="M:Fintech.WebAPI.Controllers.UserController.GetByIdAsync(System.Guid)">
             <summary>

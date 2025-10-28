@@ -1,7 +1,8 @@
 using DotNetEnv.Configuration;
 using Fintech.Application.Interfaces;
-using Fintech.Application.Interfaces.CreditApplication;
 using Fintech.Application.Interfaces.Aml;
+using Fintech.Application.Interfaces.CreditApplication;
+using Fintech.Application.Interfaces.UploadedDocuments;
 using Fintech.Application.Services;
 using Fintech.Domain.Interfaces;
 using Fintech.Infrastructure.MappingProfiles;
@@ -31,6 +32,7 @@ var corsOrigins = origins.Split(',');
 var url = builder.Configuration["SUPABASE_URL"];
 var key = builder.Configuration["SUPABASE_KEY"];
 var secret = builder.Configuration["SUPABASE_JWT_SECRET"];
+var serviceRoleKey = builder.Configuration["SUPABASE_SERVICE_ROLE_KEY"];
 
 if (string.IsNullOrWhiteSpace(url) || string.IsNullOrWhiteSpace(key) || string.IsNullOrWhiteSpace(secret))
     throw new Exception("Faltan las variables de entorno SUPABASE_URL, SUPABASE_KEY o SUPABASE_JWT_SECRET");
@@ -39,6 +41,10 @@ var options = new SupabaseOptions
 {
     AutoRefreshToken = true,
     AutoConnectRealtime = true,
+    Headers = new Dictionary<string, string>
+    {
+        { "Authorization", $"Bearer {serviceRoleKey}" }
+    }
 };
 
 // Add Supabase client to the container.
@@ -66,12 +72,15 @@ builder.Services.AddAutoMapper(cfg => { }, typeof(UserProfile), typeof(PymeProfi
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IAmlRepository, AmlRepository>();
 builder.Services.AddScoped<IPymeRepository, PymeRepository>();
+builder.Services.AddScoped<IUploadedDocumentRepository, UploadedDocumentRepository>();
 
 // Add services to the container.
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IAmlService, AmlService>();
 builder.Services.AddScoped<IPymeService, PymeService>();
+builder.Services.AddScoped<IStorageDocumentService, StorageDocumentService>();
+builder.Services.AddScoped<IUploadedDocumentService, UploadedDocumentService>();
 
 // registrar CreditFormService y CreditFormRepository
 builder.Services.AddScoped<ICreditFormService, CreditFormService>();
