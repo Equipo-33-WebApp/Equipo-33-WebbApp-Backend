@@ -193,12 +193,16 @@
             <param name="file">Archivo de imagen</param>
             <returns>Texto extraído de la imagen</returns>
         </member>
-        <member name="M:Fintech.WebAPI.Controllers.UploadedDocumentController.UploadFile(Fintech.WebAPI.Controllers.DocumentAddRequest)">
+        <member name="M:Fintech.WebAPI.Controllers.UploadedDocumentController.UploadFile(System.Guid,Fintech.WebAPI.Controllers.DocumentAddRequest)">
             <summary>
-            Sube un archivo al servidor.
+            Sube un archivo annualFinancials al servidor.
             </summary>
-            <param name="request">El archivo a subir menor a 2mb</param>
-            <returns>Archivo subido.</returns>
+            <param name="creditFormId">ID del credit form asociado (se pasa en la URL).</param>
+            /// <param name="request">
+            Form-data con el archivo (campo "File")
+            El tamaño máximo permitido es 2 MB.
+            </param>
+            <returns>Archivo subido correctamente o error correspondiente.</returns>
         </member>
         <member name="M:Fintech.WebAPI.Controllers.UserController.GetByIdAsync(System.Guid)">
             <summary>
