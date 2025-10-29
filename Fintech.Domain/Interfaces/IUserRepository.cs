@@ -11,4 +11,5 @@ public interface IUserRepository
     Task<User> CreateAsync(User user);
     Task<User> UpdateAsync(User user);
     Task DeleteAsync(Guid id);
+    Task<Guid?> GetPymeIdByUserIdAsync(Guid userId); //para status pyme
 }

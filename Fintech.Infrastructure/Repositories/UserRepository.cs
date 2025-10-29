@@ -3,6 +3,7 @@ using Fintech.Domain.Entities;
 using Fintech.Domain.Interfaces;
 using Fintech.Infrastructure.Persistence.Models;
 using Supabase;
+using Fintech.Infrastructure.Persistence.Models;
 
 namespace Fintech.Infrastructure.Repositories;
 
@@ -25,6 +26,18 @@ public class UserRepository : IUserRepository
 
         var model = result.Models.FirstOrDefault();
         return model != null ? _mapper.Map<User>(model) : null;
+    }
+
+    public async Task<Guid?> GetPymeIdByUserIdAsync(Guid userId)
+    {
+        var result = await _supabase
+            .From<CreditFormModel>()
+            .Where(x => x.UserId == userId)
+            .Limit(1)
+            .Get();
+
+        var creditForm = result.Models.FirstOrDefault();
+        return creditForm?.PymeId;
     }
 
     public async Task<User?> GetByAuthIdAsync(Guid authId)

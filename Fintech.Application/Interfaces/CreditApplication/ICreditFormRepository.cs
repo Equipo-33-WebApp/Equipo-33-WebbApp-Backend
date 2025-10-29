@@ -8,5 +8,6 @@ namespace Fintech.Application.Interfaces.CreditApplication
         Task<CreditForm?> GetByAuthIdAsync(Guid authId);
         Task<CreditForm> AddAsync(CreditForm creditForm);
         Task<CreditForm> UpdateAsync(CreditForm creditForm);
+        Task<IEnumerable<CreditForm>> GetByPymeIdAsync(Guid pymeId);
     }
 }

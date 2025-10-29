@@ -79,5 +79,22 @@ namespace Fintech.Infrastructure.Repositories
             creditForm.Id = creditModel.Models.First().Id;
             return creditForm;
         }
+
+        //status
+       
+        public async Task<IEnumerable<CreditForm>> GetByPymeIdAsync(Guid pymeId)
+        {
+            var result = await _client
+                .From<CreditFormModel>()
+                .Select("*")
+                .Where(x => x.PymeId == pymeId)
+                .Get();
+
+            var models = result.Models ?? new List<CreditFormModel>();
+
+            return models.Select(m => _mapper.Map<CreditForm>(m));
+        }
     }
-}
+
+  
+    }

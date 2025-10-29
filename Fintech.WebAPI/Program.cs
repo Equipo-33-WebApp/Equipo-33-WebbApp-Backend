@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Supabase;
+using CreditFormRepo = Fintech.Application.Interfaces.CreditApplication.ICreditFormRepository;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -83,8 +84,10 @@ builder.Services.AddScoped<IStorageDocumentService, StorageDocumentService>();
 builder.Services.AddScoped<IUploadedDocumentService, UploadedDocumentService>();
 
 // registrar CreditFormService y CreditFormRepository
-builder.Services.AddScoped<ICreditFormService, CreditFormService>();
-builder.Services.AddScoped<ICreditFormRepository, CreditFormRepository>();
+//builder.Services.AddScoped<ICreditFormService, CreditFormService>();
+builder.Services.AddScoped<Fintech.Application.Interfaces.CreditApplication.ICreditFormRepository, CreditFormRepository>();
+builder.Services.AddScoped<CreditFormRepo, CreditFormRepository>();
+//builder.Services.AddScoped<ICreditFormRepository, CreditFormRepository>();
 
 // Add controllers to the container.
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
