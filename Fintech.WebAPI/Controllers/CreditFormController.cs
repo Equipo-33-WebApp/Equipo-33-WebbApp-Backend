@@ -1,5 +1,7 @@
 ﻿using Fintech.Application.DTOs;
+using Fintech.Application.Interfaces;
 using Fintech.Application.Interfaces.CreditApplication;
+using Fintech.Application.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
@@ -12,9 +14,11 @@ namespace Fintech.WebAPI.Controllers
     public class CreditFormController : ControllerBase
     {
         private readonly ICreditFormService _creditFormService;
-        public CreditFormController(ICreditFormService creditFormService)
+        private readonly IPymeService _pymeService;
+        public CreditFormController(ICreditFormService creditFormService, IPymeService pymeService)
         {
             _creditFormService = creditFormService;
+            _pymeService = pymeService;
         }
 
         /// <summary>
@@ -60,6 +64,10 @@ namespace Fintech.WebAPI.Controllers
                 return Unauthorized("El guid no es valido.");
             try
             {
+                var pyme = await _pymeService.GetByIdAsync(dto.PymeId);
+                if (pyme == null)
+                    return BadRequest("La pyme no existe.");
+
                 var createdPyme = await _creditFormService.CreateAsync(dto, authId);
                 return CreatedAtAction(nameof(GetById), new { id = createdPyme.Id }, createdPyme);
             }

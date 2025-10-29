@@ -1,13 +1,7 @@
 ﻿using AutoMapper;
 using Fintech.Application.DTOs;
-using Fintech.Application.Interfaces;
 using Fintech.Application.Interfaces.CreditApplication;
 using Fintech.Domain.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Fintech.Application.Services
 {
@@ -36,6 +30,11 @@ namespace Fintech.Application.Services
                 UserId = authId,
                 PymeId = dto.PymeId,
                 Amount = dto.Amount,
+                TermInMonths = dto.TermInMonths,
+                AnnualIncome = dto.AnnualIncome,
+                NetIncome = dto.NetIncome,
+                CreditDestination = dto.CreditDestination,
+                RiskLevel = dto.RiskLevel,
                 Purpose = dto.Purpose,
                 Status = "pendiente",
                 CreatedAt = DateTime.UtcNow,
