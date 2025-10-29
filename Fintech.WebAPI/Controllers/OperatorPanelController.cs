@@ -1,15 +1,17 @@
-﻿using Fintech.Application.Interfaces;
+﻿using Fintech.Application.DTOs;
+using Fintech.Application.Interfaces;
 using Fintech.Application.Interfaces.CreditApplication;
 using Fintech.Domain.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace Fintech.WebAPI.Controllers;
 
 [Route("api/[controller]")]
 [Authorize]
 [ApiController]
-public class PanelController(IPanelService _panelService, IUserService _userService) : ControllerBase
+public class OperatorPanelController(IPanelService _panelService, IUserService _userService) : ControllerBase
 {
     /// <summary>
     /// Obtiene una lista paginada de solicitudes de crédito con filtro de estado opcional.
@@ -54,6 +56,45 @@ public class PanelController(IPanelService _panelService, IUserService _userServ
                 message = ex.Message,
                 stackTrace = ex.StackTrace
             });
+        }
+    }
+
+    /// <summary>
+    /// Actualiza el estado de una solicitud de Credito por su ID.
+    /// </summary>
+    /// <param name="creditFormId">ID de la solicitud de Credito a actualizar.</param>
+    /// <param name="dto">El DTO del form a actualizar .</param>
+    /// <returns>Información de la solicitud de Credito.</returns>
+    [HttpPut("{creditFormId}")]
+    public async Task<IActionResult> UpdateCreditFormById(Guid creditFormId, [FromBody] UpdateStatusCreditFormDto dto)
+    {
+        var subClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value
+                       ?? User.FindFirst("sub")?.Value;
+        if (string.IsNullOrEmpty(subClaim))
+            return Unauthorized("Revisa si el token es valido");
+        if (!Guid.TryParse(subClaim, out var authId))
+            return Unauthorized("El guid no es valido.");
+
+        if (await _userService.IsRoleAsync(Roles.OPERATOR))
+            return Unauthorized("Usuario no tiene el rol de operador.");
+
+        try
+        {
+            var updatedCreditForm = await _panelService.UpdateStatusAsync(dto, creditFormId);
+            if (updatedCreditForm == null)
+                return NotFound("No se encontro la solicitud de credito para actualizar.");
+            return Ok(updatedCreditForm);
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, new
+            {
+                error = "Error interno al actualizar la solicitud de credito. Puede ser un problema de RLS, llave foranea, o configuracion de Supabase.",
+                message = ex.Message,
+                stackTrace = ex.StackTrace
+            }
+            );
+
         }
     }
 }

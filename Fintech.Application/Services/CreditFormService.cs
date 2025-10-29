@@ -1,13 +1,7 @@
 ﻿using AutoMapper;
 using Fintech.Application.DTOs;
-using Fintech.Application.Interfaces;
 using Fintech.Application.Interfaces.CreditApplication;
 using Fintech.Domain.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Fintech.Application.Services
 {
@@ -36,8 +30,13 @@ namespace Fintech.Application.Services
                 UserId = authId,
                 PymeId = dto.PymeId,
                 Amount = dto.Amount,
+                TermInMonths = dto.TermInMonths,
+                AnnualIncome = dto.AnnualIncome,
+                NetIncome = dto.NetIncome,
+                CreditDestination = dto.CreditDestination,
+                RiskLevel = dto.RiskLevel,
                 Purpose = dto.Purpose,
-                Status = "pendiente",
+                Status = dto.Status,
                 CreatedAt = DateTime.UtcNow,
             };
 
@@ -52,6 +51,12 @@ namespace Fintech.Application.Services
             }
             //existingCreditForm.PymeId = dto.PymeId;
             existingCreditForm.Amount = dto.Amount;
+            existingCreditForm.TermInMonths = dto.TermInMonths;
+            existingCreditForm.AnnualIncome = dto.AnnualIncome;
+            existingCreditForm.NetIncome = dto.NetIncome;
+            existingCreditForm.CreditDestination = dto.CreditDestination;
+            existingCreditForm.RiskLevel = dto.RiskLevel;
+            existingCreditForm.Status = dto.Status;
             existingCreditForm.Purpose = dto.Purpose;
             return await _creditFormRepository.UpdateAsync(existingCreditForm);
 

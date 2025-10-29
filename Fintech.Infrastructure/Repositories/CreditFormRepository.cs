@@ -52,8 +52,13 @@ namespace Fintech.Infrastructure.Repositories
                 UserId = creditForm.UserId,
                 PymeId = creditForm.PymeId,
                 Amount = creditForm.Amount ?? 0,
+                TermInMonths = creditForm.TermInMonths,
+                AnnualIncome = creditForm.AnnualIncome,
+                NetIncome = creditForm.NetIncome,
+                CreditDestination = creditForm.CreditDestination,
+                RiskLevel = creditForm.RiskLevel,
                 Purpose = creditForm.Purpose ?? string.Empty,
-                Status = creditForm.Status ?? "pendiente",
+                Status = creditForm.Status ?? "Draft",
                 CreatedAt = DateTime.UtcNow,
             };
 
@@ -71,8 +76,13 @@ namespace Fintech.Infrastructure.Repositories
                 UserId = creditForm.UserId,
                 PymeId = creditForm.PymeId,
                 Amount = creditForm.Amount ?? 0,
+                TermInMonths = creditForm.TermInMonths,
+                AnnualIncome = creditForm.AnnualIncome,
+                NetIncome = creditForm.NetIncome,
+                CreditDestination = creditForm.CreditDestination,
+                RiskLevel = creditForm.RiskLevel,
                 Purpose = creditForm.Purpose ?? string.Empty,
-                Status = creditForm.Status ?? "pendiente",
+                Status = creditForm.Status ?? "Draft",
                 CreatedAt = DateTime.UtcNow,
             };
             var creditModel = await _client.From<CreditFormModelCreate>().Update(model);

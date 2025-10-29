@@ -4,6 +4,11 @@ public class CreditApplicationPanel : Entity
 {
     public Guid Id { get; set; }
     public decimal Amount { get; set; }
+    public int TermInMonths { get; set; }
+    public decimal AnnualIncome { get; set; }
+    public decimal NetIncome { get; set; }
+    public string CreditDestination { get; set; } = string.Empty;
+    public string RiskLevel { get; set; } = string.Empty;
     public string Purpose { get; set; } = string.Empty;
     public string Status { get; set; } = string.Empty;
     public DateTime UpdatedAt { get; set; }

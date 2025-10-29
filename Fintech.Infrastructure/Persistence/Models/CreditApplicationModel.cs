@@ -22,7 +22,7 @@ public class CreditApplicationModel : BaseModel
     public string Purpose { get; set; } = string.Empty;
 
     [Column("status")]
-    public string Status { get; set; } = "pendiente";
+    public string Status { get; set; } = "Draft";
 
     [Column("updated_at")]
     public DateTime UpdatedAt { get; set; }

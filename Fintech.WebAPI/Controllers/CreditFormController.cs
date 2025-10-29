@@ -1,4 +1,5 @@
 ﻿using Fintech.Application.DTOs;
+using Fintech.Application.Interfaces;
 using Fintech.Application.Interfaces.CreditApplication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -12,16 +13,18 @@ namespace Fintech.WebAPI.Controllers
     public class CreditFormController : ControllerBase
     {
         private readonly ICreditFormService _creditFormService;
-        public CreditFormController(ICreditFormService creditFormService)
+        private readonly IPymeService _pymeService;
+        public CreditFormController(ICreditFormService creditFormService, IPymeService pymeService)
         {
             _creditFormService = creditFormService;
+            _pymeService = pymeService;
         }
 
         /// <summary>
-        /// Obtiene un CreditForm por su ID.
+        /// Obtiene una solicitud de Credito por su ID.
         /// </summary>
-        /// <param name="id">ID del CreditForm a obtener.</param>
-        /// <returns>Información de CreditForm junto a sus documentos.</returns>
+        /// <param name="id">ID de la solicitud de Credito a obtener.</param>
+        /// <returns>Información de la solicitud de Credito junto a sus documentos.</returns>
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(Guid id)
         {
@@ -60,6 +63,10 @@ namespace Fintech.WebAPI.Controllers
                 return Unauthorized("El guid no es valido.");
             try
             {
+                var pyme = await _pymeService.GetByIdAsync(dto.PymeId);
+                if (pyme == null)
+                    return BadRequest("La pyme no existe.");
+
                 var createdPyme = await _creditFormService.CreateAsync(dto, authId);
                 return CreatedAtAction(nameof(GetById), new { id = createdPyme.Id }, createdPyme);
             }
@@ -107,10 +114,10 @@ namespace Fintech.WebAPI.Controllers
         }
 
         /// <summary>
-        /// Actualiza un CreditForm por su ID.
+        /// Actualiza una solicitud de Credito por su ID.
         /// </summary>
-        /// <param name="creditFormId">ID del CreditForm a actualizar.</param>
-        /// <returns>Información de CreditForm junto a sus documentos.</returns>
+        /// <param name="creditFormId">ID de la solicitud de Credito a actualizar.</param>
+        /// <returns>Información de solicitud de Credito junto a sus documentos.</returns>
         [HttpPut("{creditFormId}")]
         public async Task<IActionResult> UpdateCreditFormById(Guid creditFormId, [FromBody] UpdateCreditFormDto dto)
         {
@@ -125,6 +132,8 @@ namespace Fintech.WebAPI.Controllers
                 var existingCreditForm = await _creditFormService.GetByIdAsync(creditFormId);
                 if (existingCreditForm == null || existingCreditForm.UserId != authId)
                     return NotFound("No se encontro la solicitud de credito para actualizar o no pertenece al usuario.");
+                if (existingCreditForm == null || existingCreditForm.Status == "Pending")
+                    return NotFound("La solicitud de crédito ya fue enviada a revisar, no puede ser actualizada.");
                 var updatedCreditForm = await _creditFormService.UpdateAsync(dto, authId);
                 if (updatedCreditForm == null)
                     return NotFound("No se encontro la solicitud de credito para actualizar.");
