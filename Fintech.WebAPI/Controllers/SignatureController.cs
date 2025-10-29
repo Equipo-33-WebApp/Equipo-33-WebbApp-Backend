@@ -1,6 +1,6 @@
 ﻿using Fintech.Application.DTOs.DigitalSignature;
 using Fintech.Application.Interfaces.CreditApplication;
-using Fintech.Infrastructure.Utils;
+using Fintech.Application.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,7 +9,7 @@ namespace Fintech.WebAPI.Controllers;
 [Route("api/[controller]")]
 [ApiController]
 [Authorize]
-public class SignatureController(ISignatureService _creditApplicationService) : ControllerBase
+public class SignatureController(ISignatureService _creditApplicationService, ICreditFormService _creditFormService) : ControllerBase
 {
     /// <summary>
     /// Firma la aceptación de terminos y condiciones.
@@ -22,6 +22,10 @@ public class SignatureController(ISignatureService _creditApplicationService) : 
     {
         string host = Request.Headers.Host.ToString();
         string userAgent = Request.Headers.UserAgent.ToString();
+
+        var creditFound = await _creditFormService.GetByIdAsync(request.CreditId);
+        if(creditFound == null)
+            return NotFound("El id de crédito no existe.");
 
         var auditAcceptance = new AuditAcceptanceDto
         {
@@ -43,6 +47,10 @@ public class SignatureController(ISignatureService _creditApplicationService) : 
     [ProducesResponseType(typeof(VerifySignatureDto), StatusCodes.Status200OK)]
     public async Task<IActionResult> VerifySignature([FromBody] VerifyTextSignatureRequest request)
     {
+        var creditFound = await _creditFormService.GetByIdAsync(request.CreditId);
+        if (creditFound == null)
+            return NotFound("El id de crédito no existe.");
+
         var auditAcceptance = new SignatureDto
         {
             UserId = request.UserId,
@@ -64,6 +72,10 @@ public class SignatureController(ISignatureService _creditApplicationService) : 
     [ProducesResponseType(typeof(AuditAcceptanceDto), StatusCodes.Status200OK)]
     public async Task<IActionResult> SignDocument(IFormFile file, [FromForm] Guid creditId)
     {
+        var creditFound = await _creditFormService.GetByIdAsync(creditId);
+        if (creditFound == null)
+            return NotFound("El id de crédito no existe.");
+
         string host = Request.Headers.Host.ToString();
         string userAgent = Request.Headers.UserAgent.ToString();
         string documentHash = await HashHelper.ComputeSha256Async(file.OpenReadStream());
@@ -89,6 +101,10 @@ public class SignatureController(ISignatureService _creditApplicationService) : 
     [ProducesResponseType(typeof(VerifySignatureDto), StatusCodes.Status200OK)]
     public async Task<IActionResult> VerifyFileSignature(IFormFile file, [FromForm] Guid creditId, [FromForm] Guid userId)
     {
+        var creditFound = await _creditFormService.GetByIdAsync(creditId);
+        if (creditFound == null)
+            return NotFound("El id de crédito no existe.");
+
         string documentHash = await HashHelper.ComputeSha256Async(file.OpenReadStream());
         var auditAcceptance = new SignatureDto
         {
@@ -109,6 +125,10 @@ public class SignatureController(ISignatureService _creditApplicationService) : 
     [ProducesResponseType(typeof(VerifySignatureDto), StatusCodes.Status200OK)]
     public async Task<IActionResult> VerifyHashSignature([FromBody] VerifySignatureRequest request)
     {
+        var creditFound = await _creditFormService.GetByIdAsync(request.CreditId);
+        if (creditFound == null)
+            return NotFound("El id de crédito no existe.");
+
         var auditAcceptance = new SignatureDto
         {
             UserId = request.UserId,
