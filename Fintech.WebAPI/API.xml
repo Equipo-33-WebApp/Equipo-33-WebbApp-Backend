@@ -39,10 +39,10 @@
         </member>
         <member name="M:Fintech.WebAPI.Controllers.CreditFormController.GetById(System.Guid)">
             <summary>
-            Obtiene un CreditForm por su ID.
+            Obtiene una solicitud de Credito por su ID.
             </summary>
-            <param name="id">ID del CreditForm a obtener.</param>
-            <returns>Información de CreditForm junto a sus documentos.</returns>
+            <param name="id">ID de la solicitud de Credito a obtener.</param>
+            <returns>Información de la solicitud de Credito junto a sus documentos.</returns>
         </member>
         <member name="M:Fintech.WebAPI.Controllers.CreditFormController.CreateCreditForm(Fintech.Application.DTOs.CreateCreditFormDto)">
             <summary>
@@ -60,10 +60,10 @@
         </member>
         <member name="M:Fintech.WebAPI.Controllers.CreditFormController.UpdateCreditFormById(System.Guid,Fintech.Application.DTOs.UpdateCreditFormDto)">
             <summary>
-            Actualiza un CreditForm por su ID.
+            Actualiza una solicitud de Credito por su ID.
             </summary>
-            <param name="creditFormId">ID del CreditForm a actualizar.</param>
-            <returns>Información de CreditForm junto a sus documentos.</returns>
+            <param name="creditFormId">ID de la solicitud de Credito a actualizar.</param>
+            <returns>Información de solicitud de Credito junto a sus documentos.</returns>
         </member>
         <member name="M:Fintech.WebAPI.Controllers.FacialRecognitionController.Verify(Microsoft.AspNetCore.Http.IFormFile,Microsoft.AspNetCore.Http.IFormFile,System.String,System.String)">
             <summary>
@@ -129,11 +129,11 @@
         </member>
         <member name="M:Fintech.WebAPI.Controllers.OperatorPanelController.UpdateCreditFormById(System.Guid,Fintech.Application.DTOs.UpdateStatusCreditFormDto)">
             <summary>
-            Actualiza el estado de un CreditForm por su ID.
+            Actualiza el estado de una solicitud de Credito por su ID.
             </summary>
-            <param name="creditFormId">ID del CreditForm a actualizar.</param>
+            <param name="creditFormId">ID de la solicitud de Credito a actualizar.</param>
             <param name="dto">El DTO del form a actualizar .</param>
-            <returns>Información de CreditForm.</returns>
+            <returns>Información de la solicitud de Credito.</returns>
         </member>
         <member name="M:Fintech.WebAPI.Controllers.PymesController.GetById(System.Guid)">
             <summary>

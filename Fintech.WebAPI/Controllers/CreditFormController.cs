@@ -21,10 +21,10 @@ namespace Fintech.WebAPI.Controllers
         }
 
         /// <summary>
-        /// Obtiene un CreditForm por su ID.
+        /// Obtiene una solicitud de Credito por su ID.
         /// </summary>
-        /// <param name="id">ID del CreditForm a obtener.</param>
-        /// <returns>Información de CreditForm junto a sus documentos.</returns>
+        /// <param name="id">ID de la solicitud de Credito a obtener.</param>
+        /// <returns>Información de la solicitud de Credito junto a sus documentos.</returns>
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(Guid id)
         {
@@ -114,10 +114,10 @@ namespace Fintech.WebAPI.Controllers
         }
 
         /// <summary>
-        /// Actualiza un CreditForm por su ID.
+        /// Actualiza una solicitud de Credito por su ID.
         /// </summary>
-        /// <param name="creditFormId">ID del CreditForm a actualizar.</param>
-        /// <returns>Información de CreditForm junto a sus documentos.</returns>
+        /// <param name="creditFormId">ID de la solicitud de Credito a actualizar.</param>
+        /// <returns>Información de solicitud de Credito junto a sus documentos.</returns>
         [HttpPut("{creditFormId}")]
         public async Task<IActionResult> UpdateCreditFormById(Guid creditFormId, [FromBody] UpdateCreditFormDto dto)
         {

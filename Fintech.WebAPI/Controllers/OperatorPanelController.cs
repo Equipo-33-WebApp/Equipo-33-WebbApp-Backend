@@ -60,11 +60,11 @@ public class OperatorPanelController(IPanelService _panelService, IUserService _
     }
 
     /// <summary>
-    /// Actualiza el estado de un CreditForm por su ID.
+    /// Actualiza el estado de una solicitud de Credito por su ID.
     /// </summary>
-    /// <param name="creditFormId">ID del CreditForm a actualizar.</param>
+    /// <param name="creditFormId">ID de la solicitud de Credito a actualizar.</param>
     /// <param name="dto">El DTO del form a actualizar .</param>
-    /// <returns>Información de CreditForm.</returns>
+    /// <returns>Información de la solicitud de Credito.</returns>
     [HttpPut("{creditFormId}")]
     public async Task<IActionResult> UpdateCreditFormById(Guid creditFormId, [FromBody] UpdateStatusCreditFormDto dto)
     {
