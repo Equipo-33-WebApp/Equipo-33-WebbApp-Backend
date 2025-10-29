@@ -36,7 +36,7 @@ namespace Fintech.Application.Services
                 CreditDestination = dto.CreditDestination,
                 RiskLevel = dto.RiskLevel,
                 Purpose = dto.Purpose,
-                Status = "pendiente",
+                Status = dto.Status,
                 CreatedAt = DateTime.UtcNow,
             };
 

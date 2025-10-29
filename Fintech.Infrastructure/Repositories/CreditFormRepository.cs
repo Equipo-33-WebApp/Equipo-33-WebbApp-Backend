@@ -58,7 +58,7 @@ namespace Fintech.Infrastructure.Repositories
                 CreditDestination = creditForm.CreditDestination,
                 RiskLevel = creditForm.RiskLevel,
                 Purpose = creditForm.Purpose ?? string.Empty,
-                Status = creditForm.Status ?? "pendiente",
+                Status = creditForm.Status ?? "Draft",
                 CreatedAt = DateTime.UtcNow,
             };
 
@@ -82,7 +82,7 @@ namespace Fintech.Infrastructure.Repositories
                 CreditDestination = creditForm.CreditDestination,
                 RiskLevel = creditForm.RiskLevel,
                 Purpose = creditForm.Purpose ?? string.Empty,
-                Status = creditForm.Status ?? "pendiente",
+                Status = creditForm.Status ?? "Draft",
                 CreatedAt = DateTime.UtcNow,
             };
             var creditModel = await _client.From<CreditFormModelCreate>().Update(model);

@@ -1,7 +1,6 @@
 ﻿using Fintech.Application.DTOs;
 using Fintech.Application.Interfaces;
 using Fintech.Application.Interfaces.CreditApplication;
-using Fintech.Application.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
@@ -133,6 +132,8 @@ namespace Fintech.WebAPI.Controllers
                 var existingCreditForm = await _creditFormService.GetByIdAsync(creditFormId);
                 if (existingCreditForm == null || existingCreditForm.UserId != authId)
                     return NotFound("No se encontro la solicitud de credito para actualizar o no pertenece al usuario.");
+                if (existingCreditForm == null || existingCreditForm.Status == "Pending")
+                    return NotFound("La solicitud de crédito ya fue enviada a revisar, no puede ser actualizada.");
                 var updatedCreditForm = await _creditFormService.UpdateAsync(dto, authId);
                 if (updatedCreditForm == null)
                     return NotFound("No se encontro la solicitud de credito para actualizar.");
