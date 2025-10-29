@@ -52,6 +52,12 @@ namespace Fintech.Application.Services
             }
             //existingCreditForm.PymeId = dto.PymeId;
             existingCreditForm.Amount = dto.Amount;
+            existingCreditForm.TermInMonths = dto.TermInMonths;
+            existingCreditForm.AnnualIncome = dto.AnnualIncome;
+            existingCreditForm.NetIncome = dto.NetIncome;
+            existingCreditForm.CreditDestination = dto.CreditDestination;
+            existingCreditForm.RiskLevel = dto.RiskLevel;
+            existingCreditForm.Status = dto.Status;
             existingCreditForm.Purpose = dto.Purpose;
             return await _creditFormRepository.UpdateAsync(existingCreditForm);
 
