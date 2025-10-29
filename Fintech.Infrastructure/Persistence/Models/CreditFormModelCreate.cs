@@ -22,6 +22,16 @@ public class CreditFormModelCreate : BaseModel
 
     [Column("amount")]
     public decimal Amount { get; set; }
+    [Column("term_in_months")]
+    public int TermInMonths { get; set; }
+    [Column("annual_income")]
+    public decimal AnnualIncome { get; set; }
+    [Column("net_income")]
+    public decimal NetIncome { get; set; }
+    [Column("credit_destination")]
+    public string CreditDestination { get; set; } = string.Empty;
+    [Column("risk_level")]
+    public string RiskLevel { get; set; } = string.Empty;
 
     [Column("purpose")]
     public string Purpose { get; set; } = string.Empty;
