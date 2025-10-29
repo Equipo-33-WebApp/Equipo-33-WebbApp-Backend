@@ -58,6 +58,13 @@
             <param name="dto">El DTO del form a actualizar .</param>
             <returns>La Solicitud de credito fue creada.</returns>
         </member>
+        <member name="M:Fintech.WebAPI.Controllers.CreditFormController.UpdateCreditFormById(System.Guid,Fintech.Application.DTOs.UpdateCreditFormDto)">
+            <summary>
+            Actualiza un CreditForm por su ID.
+            </summary>
+            <param name="creditFormId">ID del CreditForm a actualizar.</param>
+            <returns>Información de CreditForm junto a sus documentos.</returns>
+        </member>
         <member name="M:Fintech.WebAPI.Controllers.FacialRecognitionController.Verify(Microsoft.AspNetCore.Http.IFormFile,Microsoft.AspNetCore.Http.IFormFile,System.String,System.String)">
             <summary>
             Verifica si dos imágenes son similares.
