@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
 using Fintech.Application.Interfaces.CreditApplication;
+using Fintech.Domain.Entities;
 using Fintech.Domain.Entities.Panel;
+using Fintech.Infrastructure.Persistence.Models;
 using Fintech.Infrastructure.Persistence.Models.Panel;
 using Supabase;
 
@@ -27,5 +29,16 @@ public class PanelRepository(Client _client, IMapper _mapper) : IPanelRepository
         var models = result.Models;
         
         return _mapper.Map<IEnumerable<CreditApplicationPanel>>(models);
+    }
+
+    public async Task<CreditForm?> UpdateStatusAsync(Guid creditFormId, string newStatus)
+    {
+        var creditForm = await _client
+            .From<CreditFormModel>()
+            .Where(cf => cf.Id == creditFormId)
+            .Set(cf => new KeyValuePair<object, object?>(cf.Status, newStatus))
+            .Update();
+
+        return _mapper.Map<CreditForm>(creditForm.Models.First());
     }
 }
