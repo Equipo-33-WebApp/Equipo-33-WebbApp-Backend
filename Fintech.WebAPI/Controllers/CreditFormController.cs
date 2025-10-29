@@ -105,5 +105,42 @@ namespace Fintech.WebAPI.Controllers
                 );
             }
         }
+
+        /// <summary>
+        /// Actualiza un CreditForm por su ID.
+        /// </summary>
+        /// <param name="creditFormId">ID del CreditForm a actualizar.</param>
+        /// <returns>Información de CreditForm junto a sus documentos.</returns>
+        [HttpPut("{creditFormId}")]
+        public async Task<IActionResult> UpdateCreditFormById(Guid creditFormId, [FromBody] UpdateCreditFormDto dto)
+        {
+            var subClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value
+                           ?? User.FindFirst("sub")?.Value;
+            if (string.IsNullOrEmpty(subClaim))
+                return Unauthorized("Revisa si el token es valido");
+            if (!Guid.TryParse(subClaim, out var authId))
+                return Unauthorized("El guid no es valido.");
+            try
+            {
+                var existingCreditForm = await _creditFormService.GetByIdAsync(creditFormId);
+                if (existingCreditForm == null || existingCreditForm.UserId != authId)
+                    return NotFound("No se encontro la solicitud de credito para actualizar o no pertenece al usuario.");
+                var updatedCreditForm = await _creditFormService.UpdateAsync(dto, authId);
+                if (updatedCreditForm == null)
+                    return NotFound("No se encontro la solicitud de credito para actualizar.");
+                return Ok(updatedCreditForm);
+            }
+            catch (Exception ex)
+            { 
+                return StatusCode(500, new
+                {
+                    error = "Error interno al actualizar la solicitud de credito. Puede ser un problema de RLS, llave foranea, o configuracion de Supabase.",
+                    message = ex.Message,
+                    stackTrace = ex.StackTrace
+                }
+                );
+
+            }
+        }
     }
 }

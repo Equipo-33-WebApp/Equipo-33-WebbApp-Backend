@@ -25,7 +25,7 @@ public class CreditFormModel : BaseModel
     public string Purpose { get; set; } = string.Empty;
 
     [Column("status")]
-    public string Status { get; set; } = "pendiente";
+    public string Status { get; set; } = "draft";
 
     [Column("created_at")]
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
