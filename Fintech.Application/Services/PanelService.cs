@@ -21,4 +21,9 @@ public class PanelService(IPanelRepository _panelRepository, ICreditFormReposito
         }
         return await _panelRepository.UpdateStatusAsync(creditFormId, dto.Status);
     }
+
+    public async Task<IEnumerable<CreditApplicationPanel>> GetAllCreditApplicationByPymeAsync(Guid pymeId, int page, int pageSize, string status)
+    {
+        return await _panelRepository.GetAllCreditApplicationByPymeAsync(pymeId, page, pageSize, status);
+    }
 }

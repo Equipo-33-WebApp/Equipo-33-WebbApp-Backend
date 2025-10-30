@@ -70,6 +70,4 @@ public class UserRepository : IUserRepository
             .Where(u => u.Id == id)
             .Delete();
     }
-
-    
 }
