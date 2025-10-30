@@ -46,9 +46,8 @@ namespace Fintech.Application.Services
 
             return await _creditFormRepository.AddAsync(creditForm);
         }
-        public async Task<CreditForm?> UpdateAsync(UpdateCreditFormDto dto, Guid authId)
+        public async Task<CreditForm?> UpdateAsync(UpdateCreditFormDto dto, CreditForm existingCreditForm)
         {
-            var existingCreditForm = await _creditFormRepository.GetByAuthIdAsync(authId);
             if (existingCreditForm == null)
             {
                 return null;
