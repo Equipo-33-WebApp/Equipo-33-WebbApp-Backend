@@ -22,6 +22,10 @@ namespace Fintech.Application.Services
         {
             return await _creditFormRepository.GetByAuthIdAsync(authId);
         }
+        public async Task<CreditForm?> GetDraftByAuthIdAsync(Guid authId)
+        {
+            return await _creditFormRepository.GetDraftByAuthIdAsync(authId);
+        }
         public async Task<CreditForm> CreateAsync(CreateCreditFormDto dto, Guid authId)
         {
             var creditForm = new CreditForm
@@ -42,9 +46,8 @@ namespace Fintech.Application.Services
 
             return await _creditFormRepository.AddAsync(creditForm);
         }
-        public async Task<CreditForm?> UpdateAsync(UpdateCreditFormDto dto, Guid authId)
+        public async Task<CreditForm?> UpdateAsync(UpdateCreditFormDto dto, CreditForm existingCreditForm)
         {
-            var existingCreditForm = await _creditFormRepository.GetByAuthIdAsync(authId);
             if (existingCreditForm == null)
             {
                 return null;

@@ -4,7 +4,6 @@ using Fintech.Domain.Entities;
 using Fintech.Domain.Entities.Panel;
 using Fintech.Infrastructure.Persistence.Models;
 using Fintech.Infrastructure.Persistence.Models.Panel;
-using GenerativeAI.Types.RagEngine;
 using Supabase;
 
 namespace Fintech.Infrastructure.Repositories;

@@ -44,6 +44,12 @@
             <param name="id">ID de la solicitud de Credito a obtener.</param>
             <returns>Información de la solicitud de Credito junto a sus documentos.</returns>
         </member>
+        <member name="M:Fintech.WebAPI.Controllers.CreditFormController.GetDraftByAuthId">
+            <summary>
+            Obtiene una solicitud de Credito en estado Draft del usuario actual.
+            </summary>
+            <returns>Información de la solicitud de Credito junto a sus documentos.</returns>
+        </member>
         <member name="M:Fintech.WebAPI.Controllers.CreditFormController.CreateCreditForm(Fintech.Application.DTOs.CreateCreditFormDto)">
             <summary>
             Crea una nueva solicitud de Credito.
@@ -53,7 +59,7 @@
         </member>
         <member name="M:Fintech.WebAPI.Controllers.CreditFormController.UpdateCreditForm(Fintech.Application.DTOs.UpdateCreditFormDto)">
             <summary>
-            Actualiza la solicitud de Credito.
+            Actualiza la solicitud de Credito en estado draft del usuario actual.
             </summary>
             <param name="dto">El DTO del form a actualizar .</param>
             <returns>La Solicitud de credito fue creada.</returns>

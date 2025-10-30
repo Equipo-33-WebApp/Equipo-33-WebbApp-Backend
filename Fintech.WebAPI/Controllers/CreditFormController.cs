@@ -30,11 +30,11 @@ namespace Fintech.WebAPI.Controllers
         {
             try
             {
-                var pyme = await _creditFormService.GetByIdAsync(id);
-                if (pyme == null)
+                var existingCreditForm = await _creditFormService.GetByIdAsync(id);
+                if (existingCreditForm == null)
                     return NotFound("No se encontre el CreditForm ingresada");
 
-                return Ok(pyme);
+                return Ok(existingCreditForm);
             }
             catch (Exception ex)
             {
@@ -46,6 +46,40 @@ namespace Fintech.WebAPI.Controllers
                 });
             }
         }
+
+        /// <summary>
+        /// Obtiene una solicitud de Credito en estado Draft del usuario actual.
+        /// </summary>
+        /// <returns>Información de la solicitud de Credito junto a sus documentos.</returns>
+        [HttpGet("auth")]
+        public async Task<IActionResult> GetDraftByAuthId()
+        {
+            var subClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value
+                           ?? User.FindFirst("sub")?.Value;
+            if (string.IsNullOrEmpty(subClaim))
+                return Unauthorized("Revisa si el token es valido");
+            if (!Guid.TryParse(subClaim, out var authId))
+                return Unauthorized("El guid no es valido.");
+
+            try
+            {
+                var existingCreditForm = await _creditFormService.GetDraftByAuthIdAsync(authId);
+                if (existingCreditForm == null)
+                    return NotFound("No se encontro un draft de CreditForm");
+
+                return Ok(existingCreditForm);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new
+                {
+                    error = "Error interno al consultar el CreditForm. Revisa la conexion con supabase y politica RLS",
+                    message = ex.Message,
+                    stackTrace = ex.StackTrace
+                });
+            }
+        }
+
         /// <summary>
         /// Crea una nueva solicitud de Credito.
         /// </summary>
@@ -67,6 +101,14 @@ namespace Fintech.WebAPI.Controllers
                 if (pyme == null)
                     return BadRequest("La pyme no existe.");
 
+                var existingCreditForm = await _creditFormService.GetDraftByAuthIdAsync(authId);
+                if (existingCreditForm != null)
+                    return Conflict(new
+                    {
+                        message = $"Ya existe una solicitud de crédito en estado draft: {existingCreditForm.Id}",
+                        existing = existingCreditForm
+                    });
+
                 var createdPyme = await _creditFormService.CreateAsync(dto, authId);
                 return CreatedAtAction(nameof(GetById), new { id = createdPyme.Id }, createdPyme);
             }
@@ -81,7 +123,7 @@ namespace Fintech.WebAPI.Controllers
             }
         }
         /// <summary>
-        /// Actualiza la solicitud de Credito.
+        /// Actualiza la solicitud de Credito en estado draft del usuario actual.
         /// </summary>
         /// <param name="dto">El DTO del form a actualizar .</param>
         /// <returns>La Solicitud de credito fue creada.</returns>
@@ -96,7 +138,11 @@ namespace Fintech.WebAPI.Controllers
                 return Unauthorized("El guid no es valido.");
             try
             {
-                var updatedCreditForm = await _creditFormService.UpdateAsync(dto, authId);
+                var existingCreditForm = await _creditFormService.GetDraftByAuthIdAsync(authId);
+                if (existingCreditForm == null)
+                    return NotFound("No se encontro un draft de CreditForm");
+
+                var updatedCreditForm = await _creditFormService.UpdateAsync(dto, existingCreditForm);
                 if (updatedCreditForm == null)
                     return NotFound("No se encontro la solicitud de credito para actualizar.");
                 return Ok(updatedCreditForm);
@@ -134,7 +180,7 @@ namespace Fintech.WebAPI.Controllers
                     return NotFound("No se encontro la solicitud de credito para actualizar o no pertenece al usuario.");
                 if (existingCreditForm == null || existingCreditForm.Status == "Pending")
                     return NotFound("La solicitud de crédito ya fue enviada a revisar, no puede ser actualizada.");
-                var updatedCreditForm = await _creditFormService.UpdateAsync(dto, authId);
+                var updatedCreditForm = await _creditFormService.UpdateAsync(dto, existingCreditForm);
                 if (updatedCreditForm == null)
                     return NotFound("No se encontro la solicitud de credito para actualizar.");
                 return Ok(updatedCreditForm);
