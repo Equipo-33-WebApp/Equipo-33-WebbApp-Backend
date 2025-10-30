@@ -2,6 +2,7 @@
 using Fintech.Application.Interfaces;
 using Fintech.Application.Interfaces.CreditApplication;
 using Fintech.Domain.Entities;
+using Fintech.Domain.Entities.Panel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
@@ -34,7 +35,8 @@ public class OperatorPanelController(IPanelService _panelService, IUserService _
 
         try
         {
-            var pymesList = await _panelService.GetAllCreditApplicationAsync(page, pageSize, status);
+            var filter = new CreditFilter(Page: page, PageSize: pageSize, Status: status);
+            var pymesList = await _panelService.GetAllCreditApplicationAsync(filter);
             var totalCount = pymesList.Count();
 
             var response = new
