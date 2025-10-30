@@ -4,21 +4,22 @@ using Fintech.Domain.Entities;
 using Fintech.Domain.Entities.Panel;
 using Fintech.Infrastructure.Persistence.Models;
 using Fintech.Infrastructure.Persistence.Models.Panel;
+using GenerativeAI.Types.RagEngine;
 using Supabase;
 
 namespace Fintech.Infrastructure.Repositories;
 
 public class PanelRepository(Client _client, IMapper _mapper) : IPanelRepository
 {
-    public async Task<IEnumerable<CreditApplicationPanel>> GetAllCreditApplicationAsync(int page, int pageSize, string status)
+    public async Task<IEnumerable<CreditApplicationPanel>> GetAllCreditApplicationAsync(CreditFilter filter)
     {
-        var from = (page - 1) * pageSize;
-        var to = from + pageSize - 1;
+        var from = (filter.Page - 1) * filter.PageSize;
+        var to = from + filter.PageSize - 1;
 
         var table = _client.From<CreditApplicationPanelModel>();
 
-        var filtered = !string.IsNullOrWhiteSpace(status)
-            ? table.Filter("status", Supabase.Postgrest.Constants.Operator.Equals, status)
+        var filtered = !string.IsNullOrWhiteSpace(filter.Status)
+            ? table.Filter("status", Supabase.Postgrest.Constants.Operator.Equals, filter.Status)
             : table;
 
         var result = await filtered
@@ -42,17 +43,17 @@ public class PanelRepository(Client _client, IMapper _mapper) : IPanelRepository
         return _mapper.Map<CreditForm>(creditForm.Models.First());
     }
 
-    public async Task<IEnumerable<CreditApplicationPanel>> GetAllCreditApplicationByPymeAsync(Guid pymeId, int page, int pageSize, string status)
+    public async Task<IEnumerable<CreditApplicationPanel>> GetAllCreditApplicationByPymeAsync(Guid pymeId, CreditFilter filter)
     {
-        var from = (page - 1) * pageSize;
-        var to = from + pageSize - 1;
+        var from = (filter.Page - 1) * filter.PageSize;
+        var to = from + filter.PageSize - 1;
 
         var table = _client.From<CreditApplicationPanelModel>();
 
         var filtered = table.Filter("pyme_id", Supabase.Postgrest.Constants.Operator.Equals, pymeId.ToString());
 
-        filtered = !string.IsNullOrWhiteSpace(status)
-            ? table.Filter("status", Supabase.Postgrest.Constants.Operator.Equals, status)
+        filtered = !string.IsNullOrWhiteSpace(filter.Status)
+            ? table.Filter("status", Supabase.Postgrest.Constants.Operator.Equals, filter.Status)
             : table;
 
         var result = await filtered

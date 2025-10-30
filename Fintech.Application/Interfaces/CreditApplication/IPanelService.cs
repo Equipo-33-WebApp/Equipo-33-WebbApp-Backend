@@ -6,7 +6,7 @@ namespace Fintech.Application.Interfaces.CreditApplication;
 
 public interface IPanelService
 {
-    Task<IEnumerable<CreditApplicationPanel>> GetAllCreditApplicationAsync(int page, int pageSize, string status);
+    Task<IEnumerable<CreditApplicationPanel>> GetAllCreditApplicationAsync(CreditFilter filter);
     Task<CreditForm?> UpdateStatusAsync(UpdateStatusCreditFormDto dto, Guid creditFormId);
-    Task<IEnumerable<CreditApplicationPanel>> GetAllCreditApplicationByPymeAsync(Guid pymeId, int page, int pageSize, string status);
+    Task<IEnumerable<CreditApplicationPanel>> GetAllCreditApplicationByPymeAsync(Guid pymeId, CreditFilter filter);
 }

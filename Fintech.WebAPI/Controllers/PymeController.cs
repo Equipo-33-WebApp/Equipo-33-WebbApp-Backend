@@ -2,6 +2,7 @@
 using Fintech.Application.Interfaces;
 using Fintech.Application.Interfaces.CreditApplication;
 using Fintech.Domain.Entities;
+using Fintech.Domain.Entities.Panel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
@@ -175,7 +176,8 @@ public class PymesController(IPymeService _pymeService, IPanelService _panelServ
             if(pyme == null)
                 return NotFound("Pyme no encontrada");
 
-            var pymesList = await _panelService.GetAllCreditApplicationByPymeAsync(pyme.Id, page, pageSize, status);
+            var filter = new CreditFilter(Page: page, PageSize: pageSize, Status: status);
+            var pymesList = await _panelService.GetAllCreditApplicationByPymeAsync(pyme.Id, filter);
             var totalCount = pymesList.Count();
 
             var response = new
