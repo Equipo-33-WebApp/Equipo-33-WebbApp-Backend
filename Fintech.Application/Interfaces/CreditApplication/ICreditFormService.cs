@@ -7,6 +7,7 @@ namespace Fintech.Application.Interfaces.CreditApplication
     {
         Task<CreditForm?> GetByIdAsync(Guid id);
         Task<CreditForm?> GetByAuthIdAsync(Guid authId);
+        Task<CreditForm?> GetDraftByAuthIdAsync(Guid authId);
         Task<CreditForm> CreateAsync(CreateCreditFormDto dto, Guid authId);
         Task<CreditForm?> UpdateAsync(UpdateCreditFormDto dto,  Guid authId);
     }

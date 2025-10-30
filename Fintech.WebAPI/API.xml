@@ -44,6 +44,12 @@
             <param name="id">ID de la solicitud de Credito a obtener.</param>
             <returns>Información de la solicitud de Credito junto a sus documentos.</returns>
         </member>
+        <member name="M:Fintech.WebAPI.Controllers.CreditFormController.GetDraftByAuthId">
+            <summary>
+            Obtiene una solicitud de Credito por su ID.
+            </summary>
+            <returns>Información de la solicitud de Credito junto a sus documentos.</returns>
+        </member>
         <member name="M:Fintech.WebAPI.Controllers.CreditFormController.CreateCreditForm(Fintech.Application.DTOs.CreateCreditFormDto)">
             <summary>
             Crea una nueva solicitud de Credito.

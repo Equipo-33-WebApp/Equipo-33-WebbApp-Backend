@@ -46,6 +46,40 @@ namespace Fintech.WebAPI.Controllers
                 });
             }
         }
+
+        /// <summary>
+        /// Obtiene una solicitud de Credito por su ID.
+        /// </summary>
+        /// <returns>Información de la solicitud de Credito junto a sus documentos.</returns>
+        [HttpGet("auth")]
+        public async Task<IActionResult> GetDraftByAuthId()
+        {
+            var subClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value
+                           ?? User.FindFirst("sub")?.Value;
+            if (string.IsNullOrEmpty(subClaim))
+                return Unauthorized("Revisa si el token es valido");
+            if (!Guid.TryParse(subClaim, out var authId))
+                return Unauthorized("El guid no es valido.");
+
+            try
+            {
+                var pyme = await _creditFormService.GetDraftByAuthIdAsync(authId);
+                if (pyme == null)
+                    return NotFound("No se encontro un draft de CreditForm");
+
+                return Ok(pyme);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new
+                {
+                    error = "Error interno al consultar el CreditForm. Revisa la conexion con supabase y politica RLS",
+                    message = ex.Message,
+                    stackTrace = ex.StackTrace
+                });
+            }
+        }
+
         /// <summary>
         /// Crea una nueva solicitud de Credito.
         /// </summary>
@@ -66,6 +100,14 @@ namespace Fintech.WebAPI.Controllers
                 var pyme = await _pymeService.GetByIdAsync(dto.PymeId);
                 if (pyme == null)
                     return BadRequest("La pyme no existe.");
+
+                var existingCreditForm = await _creditFormService.GetDraftByAuthIdAsync(authId);
+                if (existingCreditForm != null)
+                    return Conflict(new
+                    {
+                        message = $"Ya existe una solicitud de crédito en estado draft: {existingCreditForm.Id}",
+                        existing = existingCreditForm
+                    });
 
                 var createdPyme = await _creditFormService.CreateAsync(dto, authId);
                 return CreatedAtAction(nameof(GetById), new { id = createdPyme.Id }, createdPyme);
@@ -96,6 +138,10 @@ namespace Fintech.WebAPI.Controllers
                 return Unauthorized("El guid no es valido.");
             try
             {
+                var existingCreditForm = await _creditFormService.GetDraftByAuthIdAsync(authId);
+                if (existingCreditForm == null)
+                    return NotFound("No se encontro un draft de CreditForm");
+
                 var updatedCreditForm = await _creditFormService.UpdateAsync(dto, authId);
                 if (updatedCreditForm == null)
                     return NotFound("No se encontro la solicitud de credito para actualizar.");

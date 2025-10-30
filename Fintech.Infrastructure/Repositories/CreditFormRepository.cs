@@ -44,6 +44,12 @@ namespace Fintech.Infrastructure.Repositories
             var model = result.Models.FirstOrDefault();
             return model != null ? _mapper.Map<CreditForm>(model) : null;
         }
+        public async Task<CreditForm?> GetDraftByAuthIdAsync(Guid authId)
+        {
+            var result = await _client.From<CreditFormModel>().Where(x => x.UserId == authId && x.Status == "Draft").Get();
+            var model = result.Models.FirstOrDefault();
+            return model != null ? _mapper.Map<CreditForm>(model) : null;
+        }
         public async Task<CreditForm> AddAsync(CreditForm creditForm)
         {
             var model = new CreditFormModelCreate
