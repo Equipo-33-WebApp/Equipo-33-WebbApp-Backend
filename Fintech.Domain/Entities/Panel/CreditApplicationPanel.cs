@@ -17,4 +17,6 @@ public class CreditApplicationPanel : Entity
     public Guid PymeId { get; set; }
     public string CompanyName { get; set; } = string.Empty;
     public string Sector { get; set; } = string.Empty;
+
+    public List<UploadedDocument>? UploadedDocuments { get; set; } = new();
 }

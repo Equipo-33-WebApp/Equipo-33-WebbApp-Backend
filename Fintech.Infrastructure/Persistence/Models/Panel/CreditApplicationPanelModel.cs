@@ -1,5 +1,6 @@
 using Supabase.Postgrest.Attributes;
 using Supabase.Postgrest.Models;
+using System.Text.Json.Serialization;
 
 namespace Fintech.Infrastructure.Persistence.Models.Panel;
 
@@ -43,4 +44,7 @@ public class CreditApplicationPanelModel : BaseModel
 
     [Reference(typeof(PymePanelModel), ReferenceAttribute.JoinType.Left)]
     public PymePanelModel Pyme { get; set; }
+
+    [Reference(typeof(UploadedDocumentModel), ReferenceAttribute.JoinType.Left)]
+    public List<UploadedDocumentModel> UploadedDocuments { get; set; } = new();
 }
