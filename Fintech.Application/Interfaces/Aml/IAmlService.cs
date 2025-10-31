@@ -7,4 +7,5 @@ public interface IAmlService
     Task<AmlResultDto> CheckAsync(Guid authId);
     Task<IEnumerable<AmlResultDto>> GetChecksByAuthIdAsync(Guid authId);
     Task<AmlResultDto?> GetByIdAsync(Guid id);
+    Task<IEnumerable<AmlResultDto>> GetAllByPymeIdsync(Guid authId);
 }

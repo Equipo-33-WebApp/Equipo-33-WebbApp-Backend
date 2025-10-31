@@ -11,10 +11,13 @@ public class CreditApplicationPanel : Entity
     public string RiskLevel { get; set; } = string.Empty;
     public string Purpose { get; set; } = string.Empty;
     public string Status { get; set; } = string.Empty;
+    public DateTime CreatedAt { get; set; }
     public DateTime UpdatedAt { get; set; }
 
 
     public Guid PymeId { get; set; }
     public string CompanyName { get; set; } = string.Empty;
     public string Sector { get; set; } = string.Empty;
+
+    public List<UploadedDocument>? UploadedDocuments { get; set; } = new();
 }

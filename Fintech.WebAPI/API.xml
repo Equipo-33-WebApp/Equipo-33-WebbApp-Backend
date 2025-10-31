@@ -141,6 +141,13 @@
             <param name="dto">El DTO del form a actualizar .</param>
             <returns>Información de la solicitud de Credito.</returns>
         </member>
+        <member name="M:Fintech.WebAPI.Controllers.OperatorPanelController.GetByPymeIdAsync(System.Guid)">
+            <summary>
+            Obtiene todas las verificaciones AML por pyme
+            </summary>
+            <param name="id">ID de la Pyme.</param>
+            <returns>Listado de validaciones AML.</returns>
+        </member>
         <member name="M:Fintech.WebAPI.Controllers.PymesController.GetById(System.Guid)">
             <summary>
             Obtiene una Pyme por su ID.

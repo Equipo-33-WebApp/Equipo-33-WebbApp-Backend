@@ -68,4 +68,10 @@ public class AmlService : IAmlService
         var amlCheck = await _amlRepository.GetByIdAsync(id);
         return amlCheck != null ? _mapper.Map<AmlResultDto>(amlCheck) : null;
     }
+
+    public async Task<IEnumerable<AmlResultDto>> GetAllByPymeIdsync(Guid authId)
+    {
+        var amlChecks = await _amlRepository.GetAllByPymeIdsync(authId);
+        return _mapper.Map<IEnumerable<AmlResultDto>>(amlChecks);
+    }
 }

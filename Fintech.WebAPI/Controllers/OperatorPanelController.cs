@@ -1,5 +1,7 @@
 ﻿using Fintech.Application.DTOs;
+using Fintech.Application.DTOs.Aml;
 using Fintech.Application.Interfaces;
+using Fintech.Application.Interfaces.Aml;
 using Fintech.Application.Interfaces.CreditApplication;
 using Fintech.Domain.Entities;
 using Fintech.Domain.Entities.Panel;
@@ -12,7 +14,7 @@ namespace Fintech.WebAPI.Controllers;
 [Route("api/[controller]")]
 [Authorize]
 [ApiController]
-public class OperatorPanelController(IPanelService _panelService, IUserService _userService) : ControllerBase
+public class OperatorPanelController(IPanelService _panelService, IUserService _userService, IAmlService _amlService) : ControllerBase
 {
     /// <summary>
     /// Obtiene una lista paginada de solicitudes de crédito con filtro de estado opcional.
@@ -97,6 +99,45 @@ public class OperatorPanelController(IPanelService _panelService, IUserService _
             }
             );
 
+        }
+    }
+
+    /// <summary>
+    /// Obtiene todas las verificaciones AML por pyme
+    /// </summary>
+    /// <param name="id">ID de la Pyme.</param>
+    /// <returns>Listado de validaciones AML.</returns>
+    [HttpGet("aml-by-pyme{id}")]
+    public async Task<ActionResult<AmlResultDto>> GetByPymeIdAsync(Guid id)
+    {
+        var subClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value
+                       ?? User.FindFirst("sub")?.Value;
+        if (string.IsNullOrEmpty(subClaim))
+            return Unauthorized("Revisa si el token es valido");
+        if (!Guid.TryParse(subClaim, out var authId))
+            return Unauthorized("El guid no es valido.");
+
+        if (await _userService.IsRoleAsync(Roles.OPERATOR))
+            return Unauthorized("Usuario no tiene el rol de operador.");
+
+        try
+        {
+            var result = await _amlService.GetAllByPymeIdsync(id);
+            if (result == null)
+            {
+                return NotFound();
+            }
+            return Ok(result);
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, new
+            {
+                error = "Error interno al obtener AML-checks. Puede ser un problema de RLS, llave foranea, o configuracion de Supabase.",
+                message = ex.Message,
+                stackTrace = ex.StackTrace
+            }
+            );
         }
     }
 }
