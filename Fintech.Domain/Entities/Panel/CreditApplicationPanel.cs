@@ -11,6 +11,7 @@ public class CreditApplicationPanel : Entity
     public string RiskLevel { get; set; } = string.Empty;
     public string Purpose { get; set; } = string.Empty;
     public string Status { get; set; } = string.Empty;
+    public DateTime CreatedAt { get; set; }
     public DateTime UpdatedAt { get; set; }
 
 
