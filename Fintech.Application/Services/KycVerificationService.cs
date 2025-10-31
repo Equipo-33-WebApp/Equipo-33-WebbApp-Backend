@@ -11,6 +11,7 @@ public class KycVerificationService(IFacialRecognitionService _deepFaceService, 
     public async Task<KycVerificationResultDto> VerifyDocumentAndSelfieAndExtractData(
         KycVerificationRequestDto request)
     {
+        /* TODO: Comentado solo para la demo, descomentar
         var doesExistPymeByNationalIdNumber = await _pymeService.GetByNationalIdNumberAsync(request.NationalIdNumber);
         if(doesExistPymeByNationalIdNumber != null)
         {
@@ -21,7 +22,7 @@ public class KycVerificationService(IFacialRecognitionService _deepFaceService, 
                 Observation = "El documento ya se encuentra registrado.",
             };
         }
-
+        */
         var verificationResult = await PerformDeepFaceVerificationAsync(
             _deepFaceService,
             request
